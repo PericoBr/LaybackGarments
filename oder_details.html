@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details - Admin Panel - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com    " />
+  <link rel="preconnect" href="https://fonts.gstatic.com    " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="    https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css    " />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN ORDER DETAILS =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .order-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .order-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    .order-details-section {
+      background: var(--white);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .order-details-section h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .detail-item {
+      margin-bottom: 10px;
+    }
+    .detail-item strong {
+        display: block;
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 2px;
+    }
+    .detail-item span {
+        font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .status-tag {
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #ffcc00; color: #000; }
+    .status-tag.processing { background: #007bff; color: white; }
+    .status-tag.shipped { background: #28a745; color: white; }
+    .status-tag.delivered { background: #17a2b8; color: white; }
+    .status-tag.cancelled { background: #dc3545; color: white; }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html" class="active"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30    " alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Order Details Content -->
+  <main>
+    <div class="container">
+      <div class="order-header">
+        <h1>Order Details</h1>
+        <div class="order-actions">
+          <button onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+          <button id="updateStatusBtn" style="display: none;">Update Status</button> <!-- Initially hidden -->
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-details-section">
+        <h3>Order Summary</h3>
+        <div class="details-grid">
+          <div class="detail-item">
+            <strong>Order ID</strong>
+            <span id="orderIdDisplay">#0</span>
+          </div>
+          <div class="detail-item">
+            <strong>Order Number</strong>
+            <span id="orderNumberDisplay">N/A</span>
+          </div>
+          <div class="detail-item">
+            <strong>Status</strong>
+            <span id="orderStatusDisplay"><span class="status-tag">Loading...</span></span>
+          </div>
+          <div class="detail-item">
+            <strong>Payment Status</strong>
+            <span id="paymentStatusDisplay"><span class="status-tag">Loading...</span></span>
+          </div>
+          <div class="detail-item">
+            <strong>Order Date</strong>
+            <span id="orderDateDisplay">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <strong>Total Amount</strong>
+            <span id="totalAmountDisplay">R 0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Information -->
+      <div class="order-details-section">
+        <h3>Customer Information</h3>
+        <div class="details-grid">
+          <div class="detail-item">
+            <strong>Name</strong>
+            <span id="customerNameDisplay">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <strong>Email</strong>
+            <span id="customerEmailDisplay">Loading...</span>
+          </div>
+          <div class="detail-item">
+            <strong>User ID</strong>
+            <span id="customerIdDisplay">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div class="order-details-section">
+        <h3>Order Items</h3>
+        <table id="orderItemsTable">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>SKU</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="orderItemsTableBody">
+            <tr><td colspan="5" style="text-align: center;">Loading items...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Addresses -->
+      <div class="order-details-section">
+        <h3>Addresses</h3>
+        <div class="details-grid">
+          <div class="detail-item">
+            <strong>Billing Address ID</strong>
+            <span id="billingAddressIdDisplay">N/A</span>
+          </div>
+          <div class="detail-item">
+            <strong>Shipping Address ID</strong>
+            <span id="shippingAddressIdDisplay">N/A</span>
+          </div>
+        </div>
+        <!-- In a real app, you would fetch the full address details using the IDs -->
+        <p style="margin-top: 10px; color: #666;">Full address details would be fetched separately using the IDs above.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Check for admin token
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+        window.location.href = 'admin_login.html';
+    }
+
+    // Get order ID from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderId = urlParams.get('orderId');
+
+    if (!orderId) {
+        alert('Order ID not provided in URL.');
+        history.back(); // Go back if no ID
+        // Or redirect to orders list
+        // window.location.href = 'orders.html';
+        exit();
+    }
+
+    // Function to load order details
+    async function loadOrderDetails(orderId) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/orders/${orderId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include token in header
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const order = await response.json();
+
+            // Populate the display elements
+            document.getElementById('orderIdDisplay').textContent = `#${order.OrderID}`;
+            document.getElementById('orderNumberDisplay').textContent = order.OrderNumber || 'N/A';
+            document.getElementById('orderStatusDisplay').innerHTML = `<span class="status-tag ${order.OrderStatus.toLowerCase()}">${order.OrderStatus}</span>`;
+            document.getElementById('paymentStatusDisplay').innerHTML = `<span class="status-tag ${order.PaymentStatus.toLowerCase()}">${order.PaymentStatus}</span>`;
+            document.getElementById('orderDateDisplay').textContent = new Date(order.OrderDate).toLocaleString('en-ZA');
+            document.getElementById('totalAmountDisplay').textContent = `R ${order.TotalAmount?.toFixed(2) || '0.00'}`;
+            document.getElementById('customerNameDisplay').textContent = `${order.FirstName} ${order.LastName}`;
+            document.getElementById('customerEmailDisplay').textContent = order.Email;
+            document.getElementById('customerIdDisplay').textContent = order.UserID;
+            document.getElementById('billingAddressIdDisplay').textContent = order.BillingAddressID || 'N/A';
+            document.getElementById('shippingAddressIdDisplay').textContent = order.ShippingAddressID || 'N/A';
+
+            // Show the update status button
+            document.getElementById('updateStatusBtn').style.display = 'inline-block';
+
+            // Populate order items table (example, adjust based on your OrderItems structure)
+            const itemsTableBody = document.getElementById('orderItemsTableBody');
+            // For now, since we don't have OrderItems in the query result, show a message
+            // In a real implementation, you'd loop through order.items and populate rows
+            itemsTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center;">Order items data not loaded in this example. Requires OrderItems table join or separate API call.</td></tr>`;
+
+        } catch (error) {
+            console.error('Error loading order details:', error);
+            alert('Failed to load order details: ' + error.message);
+        }
+    }
+
+    // Load the order details when the page loads
+    window.onload = function() {
+        loadOrderDetails(orderId);
+    };
+
+    // Example: Update Status button functionality (similar to previous updateStatus)
+    document.getElementById('updateStatusBtn').addEventListener('click', function() {
+        const newStatus = prompt("Enter new status (e.g., Pending, Processing, Shipped, Delivered, Cancelled):");
+        if (newStatus) {
+            updateOrderStatus(orderId, newStatus);
+        }
+    });
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+          const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` // Include token
+              },
+              body: JSON.stringify({ newStatus: newStatus })
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || `Server Error: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log("Status updated successfully:", result.order);
+
+          // Reload the page to reflect the change
+          location.reload();
+
+      } catch (error) {
+          console.error('Error updating status:', error);
+          alert('Failed to update order status: ' + error.message);
+      }
+    }
+
+  </script>
+</body>
+</html>

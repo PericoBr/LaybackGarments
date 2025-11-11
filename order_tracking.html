@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Your Order - Layback Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com  " />
+  <link rel="preconnect" href="https://fonts.gstatic.com  " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css  " />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo img {
+      max-height: 60px;
+      max-width: 250px;
+      object-fit: contain;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .user-actions a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .user-actions i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* =============== MAIN CONTENT (Order Tracking) =============== */
+    main.order-tracking {
+      padding: 60px 0;
+      background-color: var(--white);
+    }
+    main.order-tracking .container {
+      max-width: 800px; /* Centered container for tracking page */
+    }
+    main.order-tracking h1 {
+      color: var(--primary);
+      font-size: 2rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    main.order-tracking p {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #666;
+    }
+
+    /* Tracking Form */
+    form {
+      background: var(--light-bg);
+      padding: 30px;
+      border-radius: var(--radius);
+      margin-bottom: 40px;
+    }
+    form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    form input[type="text"],
+    form input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .track-order-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .track-order-btn:hover {
+      opacity: 0.9;
+    }
+    .track-order-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* Tracking Results */
+    .tracking-results {
+      background: var(--white);
+      padding: 30px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+      display: none; /* Hidden initially */
+    }
+    .tracking-results h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .order-summary {
+      margin-bottom: 20px;
+    }
+    .order-detail {
+      margin-bottom: 10px;
+    }
+    .order-detail strong {
+        display: inline-block;
+        width: 150px; /* Adjust width as needed */
+        color: #666;
+    }
+    .status-tag {
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #ffcc00; color: #000; }
+    .status-tag.processing { background: #007bff; color: white; }
+    .status-tag.shipped { background: #28a745; color: white; }
+    .status-tag.delivered { background: #17a2b8; color: white; }
+    .status-tag.cancelled { background: #dc3545; color: white; }
+    .map-container {
+      height: 300px; /* Adjust height as needed */
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    /* Error Message */
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+      display: none; /* Hidden initially */
+    }
+
+    /* Help Section */
+    .help-section {
+      text-align: center;
+      padding: 20px;
+      background: var(--light-bg);
+      border-radius: var(--radius);
+    }
+    .help-section h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    .contact-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .contact-link:hover {
+      text-decoration: underline;
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* =============== MODAL =============== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .tab {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tab button {
+      padding: 10px 20px;
+      background: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab button.active {
+      background: var(--primary);
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent[style*="block"] {
+      display: block !important;
+    }
+    .tabcontent input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .tabcontent button {
+      background: var(--primary);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; text-align: center; }
+      nav ul { justify-content: center; flex-wrap: wrap; }
+      .order-detail strong { display: block; width: auto; }
+    }
+    @media (max-width: 480px) {
+      nav ul { gap: 10px; font-size: 12px; }
+      .user-actions { gap: 12px; }
+      .user-actions span { font-size: 11px; }
+      main.order-tracking h1 { font-size: 1.8rem; }
+    }
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.payment-marquee:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES%20FOR%20LBG/LOGO.png" alt="Layback Logo" />
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="join_our_team.html">Join our team</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="just_arrived.html">Just arrived</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="order_tracking.html">Track Order</a></li>
+            <li><a href="store_location.html">Stores</a></li>
+            <li><a href="gifts_promotions.html">Gifts & Promotions</a></li>
+            <li><a href="admin_page.html">Admin Panel</a></li>
+          </ul>
+        </nav>
+
+        <div class="user-actions">
+          <a href="#" class="login-register" onclick="openModal('loginModal')">
+            <i class="fas fa-user"></i>
+            <span>Login / Register</span>
+          </a>
+          <a href="#" class="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+          <a href="#" class="wishlist">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a href="#" class="profile">
+            <i class="fa-solid fa-user-check"></i>
+            <span>Profile</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="order-tracking">
+    <div class="container">
+        <h1>Track Your Order</h1>
+        <p>Enter your order number and email address to track your order status.</p>
+
+        <!-- Form -->
+        <form id="trackingForm">
+            <label for="order-number">Order Number</label>
+            <input type="text" id="order-number" name="order-number" placeholder="e.g., LB-12345678" required />
+
+            <label for="email-address">Email Address</label>
+            <input type="email" id="email-address" name="email-address" placeholder="your@email.com" required />
+
+            <button type="submit" class="track-order-btn" id="trackBtn">
+                <i class="fas fa-search"></i>
+                Track Order
+            </button>
+        </form>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="error-message"></div>
+
+        <!-- Tracking Results -->
+        <div id="trackingResults" class="tracking-results">
+            <h2>Order Details</h2>
+            <div class="order-summary">
+                <div class="order-detail"><strong>Order Number:</strong> <span id="resultOrderNumber"></span></div>
+                <div class="order-detail"><strong>Status:</strong> <span id="resultStatus"><span class="status-tag">Loading...</span></span></div>
+                <div class="order-detail"><strong>Order Date:</strong> <span id="resultOrderDate"></span></div>
+                <div class="order-detail"><strong>Total Amount:</strong> <span id="resultTotalAmount"></span></div>
+                <div class="order-detail"><strong>Shipping Address:</strong> <span id="resultShippingAddress"></span></div>
+            </div>
+            <h3>Shipping Location</h3>
+            <div id="mapContainer" class="map-container">
+                <!-- Map will be loaded here by JavaScript -->
+                <p id="mapPlaceholder">Map will load here once address is confirmed.</p>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <section class="help-section">
+            <h3>Need Help?</h3>
+            <p>If you're having trouble tracking your order or have questions about your delivery, our customer service team is here to help.</p>
+            <a href="#" class="contact-link">Contact Customer Service →</a>
+        </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="faqs.html">FAQs</a> | 
+        <a href="returns-policy.html">Return Policy</a> | 
+        <a href="join_our_team.html">Join our team</a>
+      </p>
+      <p><strong>LAYBACK GARMENTS</strong> © 2025</p>
+    </div>
+    <!-- Payment Methods Marquee -->
+<div class="payment-marquee" style="
+  background: #f8f9fa;
+  padding: 12px 0;
+  overflow: hidden;
+">
+  <div class="marquee-inner" style="
+    display: flex;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  ">
+    <!-- Icons repeated twice for seamless loop -->
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+  </div>
+</div>
+  </footer>
+
+  <!-- Login/Register Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
+      </div>
+
+      <form id="login" class="tabcontent" style="display: block;">
+        <h2>Login</h2>
+        <p>Welcome back! Enter your credentials to log in.</p>
+        <label for="loginUsername"><i class="fas fa-user"></i> Email or Username:</label>
+        <input type="text" id="loginUsername" placeholder="Enter email or username" required />
+        <label for="loginPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required />
+        <button type="button" onclick="handleLogin()" class="btn-primary">Login</button>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </form>
+
+      <form id="register" class="tabcontent">
+        <h2>Register</h2>
+        <p>Create an account to enjoy exclusive benefits!</p>
+        <label for="registerName"><i class="fas fa-user"></i> Full Name:</label>
+        <input type="text" id="registerName" placeholder="Enter full name" required />
+        <label for="registerEmail"><i class="fas fa-envelope"></i> Email:</label>
+        <input type="email" id="registerEmail" placeholder="Enter email" required />
+        <label for="registerPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="registerPassword" placeholder="Enter password" required />
+        <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        <button type="button" onclick="handleRegister()" class="btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions (Remain unchanged)
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    function openTab(evt, tabName) {
+      const tabcontent = document.querySelectorAll(".tabcontent");
+      tabcontent.forEach(tab => tab.style.display = "none");
+
+      const tablinks = document.querySelectorAll(".tablinks");
+      tablinks.forEach(tab => tab.classList.remove("active"));
+
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    function handleLogin() {
+      const user = document.getElementById("loginUsername").value;
+      if (user) {
+        alert(`Welcome back, ${user}!`);
+        closeModal();
+      } else alert("Please enter your details.");
+    }
+
+    function handleRegister() {
+      const name = document.getElementById("registerName").value;
+      const pass = document.getElementById("registerPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+      if (!name || !pass || pass !== confirm) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+      alert(`Account created for ${name}!`);
+      closeModal();
+      openTab({ currentTarget: document.querySelector('.tablinks') }, 'login');
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("loginModal");
+      if (event.target === modal) closeModal();
+    };
+
+    // Order Tracking Script
+    document.getElementById('trackingForm').addEventListener('submit', async function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const orderNumber = document.getElementById('order-number').value.trim();
+        const email = document.getElementById('email-address').value.trim();
+        const trackBtn = document.getElementById('trackBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const trackingResults = document.getElementById('trackingResults');
+
+        // Clear previous results and errors
+        errorMessage.style.display = 'none';
+        trackingResults.style.display = 'none';
+        document.getElementById('mapPlaceholder').style.display = 'block'; // Show placeholder again
+
+        // Show loading state
+        trackBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Tracking...';
+        trackBtn.disabled = true;
+
+        try {
+            // Make the API request
+            const response = await fetch(`http://localhost:3000/api/track-order?orderNumber=${encodeURIComponent(orderNumber)}&email=${encodeURIComponent(email)}`);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Update the results section with the data
+            document.getElementById('resultOrderNumber').textContent = data.OrderNumber;
+            document.getElementById('resultStatus').innerHTML = `<span class="status-tag ${data.Status.toLowerCase()}">${data.Status}</span>`;
+            document.getElementById('resultOrderDate').textContent = new Date(data.OrderDate).toLocaleDateString('en-ZA');
+            document.getElementById('resultTotalAmount').textContent = `R ${data.TotalAmount?.toFixed(2) || '0.00'}`;
+            document.getElementById('resultShippingAddress').textContent = data.ShippingAddress || 'Address not available';
+
+            // Show the results section
+            trackingResults.style.display = 'block';
+
+            // --- Load Map ---
+            loadMap(data.ShippingAddress); // Pass the address to the map function
+
+        } catch (error) {
+            console.error('Tracking error:', error);
+            errorMessage.textContent = 'Error: ' + error.message;
+            errorMessage.style.display = 'block';
+        } finally {
+            // Revert button state
+            trackBtn.innerHTML = '<i class="fas fa-search"></i> Track Order';
+            trackBtn.disabled = false;
+        }
+    });
+
+    // Function to load map (using Google Maps as an example)
+    function loadMap(address) {
+        const mapContainer = document.getElementById('mapContainer');
+        const mapPlaceholder = document.getElementById('mapPlaceholder');
+
+        if (!address) {
+            mapPlaceholder.textContent = 'Shipping address not available for this order.';
+            return;
+        }
+
+        // Clear the placeholder
+        mapPlaceholder.style.display = 'none';
+
+        // Example using Google Maps Embed API (simpler than full JavaScript API for basic display)
+        // You need to get an API key from Google Cloud Console
+        // const googleMapsApiKey = 'YOUR_GOOGLE_MAPS_API_KEY'; // Store this securely if using server-side rendering or environment variable
+
+        // Example using OpenStreetMap Nominatim for geocoding and Leaflet for display
+        // This is often free, but has usage limits and requires setting up Leaflet
+        // For simplicity here, we'll just show the address text if no map service is configured
+
+        // --- Option 1: Show Address Text (Fallback) ---
+        mapContainer.innerHTML = `<p>Shipping Address: ${address}</p>`;
+
+        // --- Option 2: Google Maps Embed (Requires API Key) ---
+        // Uncomment and configure the following if you have a Google Maps API key:
+        /*
+        const encodedAddress = encodeURIComponent(address);
+        const googleMapUrl = `https://www.google.com/maps/embed/v1/place?key=${googleMapsApiKey}&q=${encodedAddress}&zoom=15`;
+
+        mapContainer.innerHTML = `<iframe width="100%" height="100%" frameborder="0" style="border:0" src="${googleMapUrl}" allowfullscreen></iframe>`;
+        */
+
+        // --- Option 3: Leaflet + OpenStreetMap (Requires including Leaflet CSS/JS) ---
+        // Uncomment and configure the following if you include Leaflet libraries:
+        /*
+        // Check if Leaflet is loaded
+        if (typeof L !== 'undefined') {
+            // Clear container
+            mapContainer.innerHTML = '<div id="leafletMap" style="height: 100%;"></div>';
+            const map = L.map('leafletMap').setView([-26.2041, 28.0473], 13); // Default view (e.g., Johannesburg)
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Geocode the address using Nominatim
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    const lat = parseFloat(data[0].lat);
+                    const lon = parseFloat(data[0].lon);
+                    map.setView([lat, lon], 15);
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup(address)
+                        .openPopup();
+                } else {
+                    // Handle case where address is not found
+                    L.marker([-26.2041, 28.0473]).addTo(map) // Default marker
+                        .bindPopup('Address not found on map.');
+                }
+            })
+            .catch(err => {
+                console.error("Geocoding error:", err);
+                L.marker([-26.2041, 28.0473]).addTo(map) // Default marker
+                    .bindPopup('Error geocoding address.');
+            });
+        } else {
+            // Fallback if Leaflet is not loaded
+            mapContainer.innerHTML = `<p>Shipping Address: ${address}</p><p>(Map service not loaded)</p>`;
+        }
+        */
+
+    }
+
+  </script>
+</body>
+</html>

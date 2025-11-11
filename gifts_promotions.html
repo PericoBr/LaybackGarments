@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gifts & Promotions - Layback Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo img {
+      max-height: 60px;
+      max-width: 250px;
+      object-fit: contain;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .user-actions a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .user-actions i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 35px;
+      font-size: 13px;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* =============== HERO SECTION =============== */
+    .hero {
+      padding: 80px 0;
+      text-align: center;
+      background-color: var(--light-bg);
+    }
+    .hero h1 {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: #666;
+    }
+
+    /* =============== MAIN CONTENT =============== */
+    main {
+      padding: 60px 0;
+      background-color: var(--white);
+    }
+    main .container {
+      max-width: 1000px; /* Slightly wider container for content */
+    }
+
+    /* Content Sections */
+    .content-section {
+      margin-bottom: 50px;
+    }
+    .content-section h2 {
+      color: var(--primary);
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .content-section p {
+      margin-bottom: 15px;
+    }
+    .content-section ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+    .content-section ul li {
+      margin-bottom: 8px;
+    }
+    .learn-more {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 35px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+    .learn-more:hover {
+      opacity: 0.9;
+    }
+
+    /* Promotion & Gift Grids */
+    .promotion-grid,
+    .gift-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .promotion,
+    .gift {
+      background: var(--light-bg);
+      padding: 20px;
+      border-radius: var(--radius);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .promotion:hover,
+    .gift:hover {
+      transform: translateY(-5px);
+    }
+    .promotion img,
+    .gift img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-bottom: 15px;
+    }
+    .promotion h3,
+    .gift h3 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+    .promotion p,
+    .gift p {
+      margin-bottom: 5px;
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* =============== MODAL =============== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .tab {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tab button {
+      padding: 10px 20px;
+      background: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab button.active {
+      background: var(--primary);
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent[style*="block"] {
+      display: block !important;
+    }
+    .tabcontent input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .tabcontent button {
+      background: var(--primary);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; text-align: center; }
+      nav ul { justify-content: center; flex-wrap: wrap; }
+      .search-bar { justify-content: center; }
+      .hero h1 { font-size: 2rem; }
+      .hero p { font-size: 1rem; }
+      .content-section h2 { font-size: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      nav ul { gap: 10px; font-size: 12px; }
+      .user-actions { gap: 12px; }
+      .user-actions span { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES%20FOR%20LBG/LOGO.png" alt="Layback Logo" />
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="join_our_team.html">Join our team</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="just_arrived.html">Just arrived</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="order_tracking.html">Track Order</a></li>
+            <li><a href="store_location.html">Stores</a></li>
+            <li><a href="gifts_promotions.html">Gifts & Promotions</a></li>
+            <li><a href="admin_page.html">Admin Panel</a></li>
+          </ul>
+        </nav>
+
+        <div class="user-actions">
+          <a href="#" class="login-register" onclick="openModal('loginModal')">
+            <i class="fas fa-user"></i>
+            <span>Login / Register</span>
+          </a>
+          <a href="#" class="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+          <a href="#" class="wishlist">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a href="#" class="profile">
+            <i class="fa-solid fa-user-check"></i>
+            <span>Profile</span>
+          </a>
+        </div>
+      </div>
+
+      <form class="search-bar">
+        <input type="text" placeholder="Search..." required />
+        <select>
+          <option value="">SELECT CATEGORY</option>
+          <option value="clothing">Clothing</option>
+          <option value="shoes">Shoes</option>
+          <option value="accessories">Accessories</option>
+        </select>
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>Discover Exclusive Gifts and Promotions</h1>
+      <p>Unlock exciting rewards and discounts with Layback Garments.</p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <!-- How to Earn Gifts -->
+      <section class="content-section">
+        <h2>How to Earn Gifts</h2>
+        <p>By shopping with us, you can earn points that can be redeemed for exclusive gifts. Here's how:</p>
+        <ul>
+          <li>Every purchase earns you points.</li>
+          <li>Refer friends to earn bonus points.</li>
+          <li>Complete surveys or participate in contests for additional rewards.</li>
+        </ul>
+        <a href="#" class="learn-more">Learn More</a>
+      </section>
+
+      <!-- Current Promotions -->
+      <section class="content-section">
+        <h2>Current Promotions</h2>
+        <div class="promotion-grid">
+          <div class="promotion">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/V1.png" alt="Promotion Image" />
+            <p>Use code: WELCOME20</p>
+          </div>
+          <div class="promotion">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/V2.png" alt="Promotion Image" />
+            <h3>Free Shipping on Orders Over R500</h3>
+            <p>No minimum purchase required.</p>
+          </div>
+          <div class="promotion">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/V3.png" alt="Promotion Image" />
+            <h3>Buy One, Get One 50% Off</h3>
+            <p>Valid on selected items.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gift Ideas -->
+      <section class="content-section">
+        <h2>Gift Ideas</h2>
+        <p>Looking for the perfect gift? Here are some ideas:</p>
+        <div class="gift-grid">
+          <div class="gift">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/M1.png" alt="Gift Image" />
+            <h3>Custom T-Shirts</h3>
+            <p>Personalize your style with custom designs.</p>
+          </div>
+          <div class="gift">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/M2.png" alt="Gift Image" />
+            <h3>Sportswear Bundles</h3>
+            <p>Stay active with our sportswear collections.</p>
+          </div>
+          <div class="gift">
+            <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/M3.png" alt="Gift Image" />
+            <h3>Accessories</h3>
+            <p>Upgrade your look with stylish accessories.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="faqs.html">FAQs</a> | 
+        <a href="returns-policy.html">Return Policy</a> | 
+        <a href="join_our_team.html">Join our team</a>
+      </p>
+      <p><strong>LAYBACK GARMENTS</strong> © 2025</p>
+    </div>
+    <!-- Payment Methods Marquee -->
+<div class="payment-marquee" style="
+  background: #f8f9fa;
+  padding: 12px 0;
+  overflow: hidden;
+">
+  <div class="marquee-inner" style="
+    display: flex;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  ">
+    <!-- Icons repeated twice for seamless loop -->
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+  </div>
+</div>
+  </footer>
+
+  <!-- Login/Register Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
+      </div>
+
+      <form id="login" class="tabcontent" style="display: block;">
+        <h2>Login</h2>
+        <p>Welcome back! Enter your credentials to log in.</p>
+        <label for="loginUsername"><i class="fas fa-user"></i> Email or Username:</label>
+        <input type="text" id="loginUsername" placeholder="Enter email or username" required />
+        <label for="loginPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required />
+        <button type="button" onclick="handleLogin()" class="btn-primary">Login</button>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </form>
+
+      <form id="register" class="tabcontent">
+        <h2>Register</h2>
+        <p>Create an account to enjoy exclusive benefits!</p>
+        <label for="registerName"><i class="fas fa-user"></i> Full Name:</label>
+        <input type="text" id="registerName" placeholder="Enter full name" required />
+        <label for="registerEmail"><i class="fas fa-envelope"></i> Email:</label>
+        <input type="email" id="registerEmail" placeholder="Enter email" required />
+        <label for="registerPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="registerPassword" placeholder="Enter password" required />
+        <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        <button type="button" onclick="handleRegister()" class="btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    function openTab(evt, tabName) {
+      const tabcontent = document.querySelectorAll(".tabcontent");
+      tabcontent.forEach(tab => tab.style.display = "none");
+
+      const tablinks = document.querySelectorAll(".tablinks");
+      tablinks.forEach(tab => tab.classList.remove("active"));
+
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    function handleLogin() {
+      const user = document.getElementById("loginUsername").value;
+      if (user) {
+        alert(`Welcome back, ${user}!`);
+        closeModal();
+      } else alert("Please enter your details.");
+    }
+
+    function handleRegister() {
+      const name = document.getElementById("registerName").value;
+      const pass = document.getElementById("registerPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+      if (!name || !pass || pass !== confirm) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+      alert(`Account created for ${name}!`);
+      closeModal();
+      openTab({ currentTarget: document.querySelector('.tablinks') }, 'login');
+    }
+
+    window.onclick = function(event) {
+      const modal = document.getElementById("loginModal");
+      if (event.target === modal) closeModal();
+    };
+  </script>
+</body>
+</html>

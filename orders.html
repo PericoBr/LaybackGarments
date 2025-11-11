@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders - Admin Panel - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com        " />
+  <link rel="preconnect" href="https://fonts.gstatic.com        " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="        https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css        " />
+
+  <!-- jsPDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js    "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js    "></script>
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN ORDERS =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .orders-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .orders-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .orders-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .filter-section label {
+      margin-right: 10px;
+    }
+    .filter-section select, .filter-section input {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      margin-right: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .status-tag {
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #ffcc00; color: #000; }
+    .status-tag.processing { background: #007bff; color: white; }
+    .status-tag.shipped { background: #28a745; color: white; }
+    .status-tag.delivered { background: #17a2b8; color: white; }
+    .status-tag.cancelled { background: #dc3545; color: white; }
+    .actions button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .actions .approve-btn { background: #28a745; color: white; }
+    .actions .ship-btn { background: #007bff; color: white; }
+    .actions .notify-btn { background: #ffc107; color: #000; }
+    .actions .view-btn { background: var(--primary); color: white; }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Check for admin token on page load -->
+  <script>
+    window.onload = function() {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            // Redirect to login if no token found
+            window.location.href = 'admin_login.html';
+        } else {
+            // Optional: Verify token is still valid by making a simple request
+            // For now, just ensure the token is present.
+            // You might want to call a 'verify' endpoint later.
+        }
+    };
+  </script>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html" class="active"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30        " alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Orders Content -->
+  <main>
+    <div class="container">
+      <div class="orders-header">
+        <h1>Order Management</h1>
+        <div class="orders-actions">
+          <button onclick="refreshOrders()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          <button onclick="exportToPDF()"><i class="fas fa-file-pdf"></i> Export to PDF</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-section">
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter">
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="processing">Processing</option>
+          <option value="shipped">Shipped</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <label for="dateFrom">From:</label>
+        <input type="date" id="dateFrom">
+        <label for="dateTo">To:</label>
+        <input type="date" id="dateTo">
+        <button onclick="applyFilters()">Apply Filters</button>
+      </div>
+
+      <!-- Orders Table -->
+      <table id="orderTable">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+          <!-- Orders will be loaded here by JavaScript -->
+          <tr><td colspan="7" style="text-align: center;">Loading orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Function to load orders from the backend
+    async function loadOrders(statusFilter = null) { // Add optional status filter
+        const ordersTableBody = document.getElementById('ordersTableBody');
+
+        // Show loading state
+        ordersTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading orders...</td></tr>';
+
+        try {
+            let url = 'http://localhost:3000/api/orders';
+            if (statusFilter && ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].includes(statusFilter)) {
+                url += `?status=${statusFilter}`;
+            }
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const orders = await response.json();
+
+            // Clear the table body
+            ordersTableBody.innerHTML = '';
+
+            // Populate the table body with fetched orders
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                // Format the date for better readability (using South African locale)
+                const orderDate = new Date(order.OrderDate).toLocaleDateString('en-ZA'); // e.g., 10/10/2023
+                row.innerHTML = `
+                    <td>#${order.OrderID}</td>
+                    <td>${order.FirstName} ${order.LastName}</td>
+                    <td>${orderDate}</td>
+                    <td><span class="status-tag ${order.Status.toLowerCase()}">${order.Status}</span></td>
+                    <td><span class="status-tag ${order.PaymentStatus.toLowerCase()}">${order.PaymentStatus}</span></td>
+                    <td>R ${order.TotalAmount?.toFixed(2) || '0.00'}</td>
+                    <td class="actions">
+                        <button class="view-btn" onclick="viewOrder('${order.OrderID}')"><i class="fas fa-eye"></i></button>
+                        <button class="approve-btn" onclick="updateStatus(this, '${order.OrderID}', 'Shipped')">Ship</button>
+                        <button class="notify-btn" onclick="sendNotification('${order.FirstName} ${order.LastName}')">Notify</button>
+                    </td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error('Error loading orders:', error);
+            ordersTableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red;">Error loading orders. Please check the console.</td></tr>`;
+        }
+    }
+
+    // Refresh orders button handler
+    function refreshOrders() {
+        const selectedStatus = document.getElementById('statusFilter').value; // Get selected filter
+        loadOrders(selectedStatus); // Reload orders with current filter
+    }
+
+    // Apply filters button handler
+    function applyFilters() {
+        refreshOrders(); // Use the same logic as refresh
+    }
+
+    // Update the updateStatus function to call the backend
+    async function updateStatus(btn, orderId, newStatus) {
+      try {
+          const response = await fetch(`http://localhost:3000/api/orders/${orderId}/status`, {
+              method: 'PUT',
+              headers: {
+                  'Content-Type': 'application/json',
+                  // Include authentication token here if implemented
+                  // 'Authorization': `Bearer ${getAuthToken()}`
+              },
+              body: JSON.stringify({ newStatus: newStatus })
+          });
+
+          if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || `Server Error: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log("Status updated successfully:", result.order);
+
+          // Reload the table to reflect the change from the server
+          refreshOrders(); // Simpler: just reload the table
+
+      } catch (error) {
+          console.error('Error updating status:', error);
+          alert('Failed to update order status: ' + error.message);
+      }
+    }
+
+    function sendNotification(customerName) {
+      alert(`Email notification has been sent to ${customerName}.`);
+    }
+
+    function viewOrder(orderId) {
+      // Navigate to the new order details page
+      window.location.href = `order_details.html?orderId=${orderId}`;
+    }
+
+    // Function to export table data to PDF
+    function exportToPDF() {
+        const { jsPDF } = window.jspdf;
+        // Get the table element
+        const table = document.getElementById('orderTable');
+
+        // Create a new jsPDF instance
+        const doc = new jsPDF('l', 'pt', 'a4'); // Landscape, points, A4
+
+        // Use the autoTable plugin to add the table
+        doc.autoTable({
+            html: table, // Use the table element directly
+            startY: 20, // Start adding the table after 20 points from the top
+            // Optional: Customize styles
+            styles: {
+                fontSize: 8, // Smaller font size for table content
+                cellPadding: 4
+            },
+            headStyles: {
+                fillColor: [11, 102, 35], // Use your primary color (0b6623 in RGB)
+                textColor: [255, 255, 255], // White text for header
+                fontSize: 9
+            }
+        });
+
+        // Save the PDF with a filename
+        doc.save('LayBack_Garments_Orders.pdf');
+    }
+
+    // Load orders when the page loads (with default filter)
+    // Note: The window.onload in the script tag above will overwrite this one.
+    // This is fine, as the token check script handles the initial load.
+    // If you want to load orders *after* the token check, you can call loadOrders() inside the token check success block.
+    // For now, removing this duplicate assignment.
+    // window.onload = function() {
+    //     loadOrders(); // Add this line to load orders
+    // };
+
+  </script>
+</body>
+</html>

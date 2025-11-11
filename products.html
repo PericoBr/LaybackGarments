@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products - Admin Panel - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com  " />
+  <link rel="preconnect" href="https://fonts.gstatic.com  " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css  " />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN PRODUCTS =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .products-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .products-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .filter-section label {
+      margin-right: 10px;
+    }
+    .filter-section select, .filter-section input {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      margin-right: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .product-image {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: var(--radius);
+    }
+    .actions button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .actions .edit-btn { background: #ffc107; color: #000; }
+    .actions .delete-btn { background: #dc3545; color: white; }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+    }
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.payment-marquee:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+  </style>
+</head>
+<body>
+
+    <!-- Check for admin token on page load -->
+  <script>
+    window.onload = function() {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            // Redirect to login if no token found
+            window.location.href = 'admin_login.html';
+        } else {
+            // Optional: Verify token is still valid by making a simple request
+            // For now, just ensure the token is present.
+            // You might want to call a 'verify' endpoint later.
+        }
+    };
+  </script>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html" class="active"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30  " alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Products Content -->
+  <main>
+    <div class="container">
+      <div class="products-header">
+        <h1>Product Management</h1>
+        <div class="products-actions">
+          <button onclick="showAddProductModal()"><i class="fas fa-plus"></i> Add Product</button>
+          <button><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-section">
+        <label for="categoryFilter">Category:</label>
+        <select id="categoryFilter">
+          <option value="all">All</option>
+          <option value="tops">Tops</option>
+          <option value="bottoms">Bottoms</option>
+          <option value="headwear">Headwear</option>
+          <option value="tracksuits">Tracksuits</option>
+        </select>
+        <label for="searchProduct">Search:</label>
+        <input type="text" id="searchProduct" placeholder="Product Name...">
+        <button onclick="applyFilters()">Apply Filters</button>
+      </div>
+
+      <!-- Products Table -->
+      <table id="productTable">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img src="https://via.placeholder.com/50x50" alt="Product Image" class="product-image"></td>
+            <td>Comfy Sherpa suite</td>
+            <td>Tracksuits</td>
+            <td>R 2,500.00</td>
+            <td>15</td>
+            <td class="actions">
+              <button class="edit-btn" onclick="editProduct('1')"><i class="fas fa-edit"></i></button>
+              <button class="delete-btn" onclick="deleteProduct('1')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="https://via.placeholder.com/50x50" alt="Product Image" class="product-image"></td>
+            <td>Browelas Beanie</td>
+            <td>Headwear</td>
+            <td>R 250.00</td>
+            <td>50</td>
+            <td class="actions">
+              <button class="edit-btn" onclick="editProduct('2')"><i class="fas fa-edit"></i></button>
+              <button class="delete-btn" onclick="deleteProduct('2')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="https://via.placeholder.com/50x50" alt="Product Image" class="product-image"></td>
+            <td>Comfy Sherpa Top</td>
+            <td>Tops</td>
+            <td>R 1,500.00</td>
+            <td>22</td>
+            <td class="actions">
+              <button class="edit-btn" onclick="editProduct('3')"><i class="fas fa-edit"></i></button>
+              <button class="delete-btn" onclick="deleteProduct('3')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td><img src="https://via.placeholder.com/50x50" alt="Product Image" class="product-image"></td>
+            <td>M4 Tailored Pants</td>
+            <td>Bottoms</td>
+            <td>R 1,200.00</td>
+            <td>8</td>
+            <td class="actions">
+              <button class="edit-btn" onclick="editProduct('4')"><i class="fas fa-edit"></i></button>
+              <button class="delete-btn" onclick="deleteProduct('4')"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="productModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+    <div style="background-color: white; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 8px;">
+      <h3 id="modalTitle">Add Product</h3>
+      <form id="productForm">
+        <label for="productName">Name:</label>
+        <input type="text" id="productName" required><br><br>
+        <label for="productCategory">Category:</label>
+        <select id="productCategory" required>
+          <option value="tops">Tops</option>
+          <option value="bottoms">Bottoms</option>
+          <option value="headwear">Headwear</option>
+          <option value="tracksuits">Tracksuits</option>
+        </select><br><br>
+        <label for="productPrice">Price:</label>
+        <input type="number" id="productPrice" step="0.01" required><br><br>
+        <label for="productStock">Stock:</label>
+        <input type="number" id="productStock" required><br><br>
+        <label for="productImage">Image URL:</label>
+        <input type="text" id="productImage" placeholder="https://..."><br><br>
+        <button type="submit">Save Product</button>
+        <button type="button" onclick="closeModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function showAddProductModal() {
+        document.getElementById('modalTitle').textContent = 'Add Product';
+        document.getElementById('productForm').reset();
+        document.getElementById('productModal').style.display = 'block';
+    }
+
+    function editProduct(productId) {
+        document.getElementById('modalTitle').textContent = 'Edit Product';
+        // In a real app, fetch product data by ID and populate the form
+        document.getElementById('productModal').style.display = 'block';
+    }
+
+    function deleteProduct(productId) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            // In a real app, send request to delete product by ID
+            alert(`Product ID ${productId} deleted!`);
+            // Refresh table or remove row from DOM
+        }
+    }
+
+    function applyFilters() {
+      alert('Applying filters...');
+    }
+
+    function closeModal() {
+        document.getElementById('productModal').style.display = 'none';
+    }
+
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        // In a real app, collect form data and send request to save product
+        alert('Product saved!');
+        closeModal();
+    });
+
+  </script>
+</body>
+</html>

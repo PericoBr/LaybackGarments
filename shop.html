@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop - Layback Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com        " />
+  <link rel="preconnect" href="https://fonts.gstatic.com        " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="        https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css        " />
+  
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo img {
+      max-height: 60px;
+      max-width: 250px;
+      object-fit: contain;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .user-actions a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .user-actions i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 35px;
+      font-size: 13px;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* =============== MAIN CONTENT =============== */
+    main {
+      padding: 30px 0;
+    }
+    .breadcrumb {
+      list-style: none;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .breadcrumb a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .breadcrumb .active {
+      color: #666;
+    }
+
+    /* =============== FILTERS & PRODUCTS LAYOUT =============== */
+    .filters-and-products {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .filters {
+      flex: 0 0 250px;
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .products {
+      flex: 1;
+      min-width: 0; /* Prevents flex items from overflowing */
+    }
+
+    /* Filter Styles */
+    .filters h3 {
+      margin: 15px 0 10px;
+      font-size: 16px;
+      color: var(--primary);
+    }
+    .filters form {
+      margin-bottom: 20px;
+    }
+    .filters label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .filters input[type="range"] {
+      width: 100%;
+    }
+    .filter-button, .clear-filters-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+    .clear-filters-button {
+      background: #666;
+    }
+
+    /* Color & Size Filters */
+    .color-filters, .size-filters {
+      list-style: none;
+    }
+    .color-filters li, .size-filters li {
+      margin-bottom: 8px;
+    }
+    .color-filters label, .size-filters label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .color-circle {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 8px;
+      border: 1px solid #ccc;
+    }
+    .color-circle.beige { background-color: beige; }
+    .color-circle.black { background-color: black; }
+    .color-circle.blue { background-color: blue; }
+    .color-circle.brown { background-color: brown; }
+    .color-circle.green { background-color: green; }
+    .color-circle.grey { background-color: grey; }
+    .count {
+      color: #666;
+      margin-left: auto;
+    }
+
+    /* Product Grid Controls */
+    .product-grid-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+      background: var(--white);
+      padding: 10px 15px;
+      border-radius: var(--radius);
+    }
+    .pagination, .view-options, .sorting {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .view-options button {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 5px;
+      cursor: pointer;
+    }
+    .view-options button.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .sorting select {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+    }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 25px;
+    }
+    .product {
+      position: relative;
+      background: var(--white);
+      padding: 15px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .product:hover {
+      transform: translateY(-5px);
+    }
+    .product a img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+    }
+    .product h3 {
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+    .product p:nth-of-type(1) {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .product p:nth-of-type(2) {
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    /* Wishlist Button */
+    .wishlist-button {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      width: 100%;
+    }
+    .wishlist-button:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Pagination Controls */
+    .pagination-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .pagination-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .pagination-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* =============== MODAL =============== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .tab {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tab button {
+      padding: 10px 20px;
+      background: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab button.active {
+      background: var(--primary);
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent[style*="block"] {
+      display: block !important;
+    }
+    .tabcontent input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .tabcontent button {
+      background: var(--primary);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* Cart Modal Specific Styles */
+    .cart-modal-content {
+        background: white;
+        margin: 10% auto;
+        padding: 20px;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 10px;
+        position: relative;
+        max-height: 80vh; /* Limit height */
+        overflow-y: auto; /* Allow scrolling if content is long */
+    }
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .cart-item-info {
+        flex: 1;
+    }
+    .cart-item-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .cart-item-quantity {
+        width: 50px;
+        text-align: center;
+    }
+    .remove-from-cart {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .cart-total {
+        font-weight: bold;
+        margin-top: 15px;
+        text-align: right;
+    }
+    .checkout-button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 35px;
+        cursor: pointer;
+        font-weight: 600;
+        display: block;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    /* Wishlist Modal Specific Styles */
+    .wishlist-modal-content {
+        background: white;
+        margin: 5% auto;
+        padding: 20px;
+        width: 90%;
+        max-width: 800px; /* Wider for wishlist */
+        border-radius: 10px;
+        position: relative;
+        max-height: 85vh; /* Limit height */
+        overflow-y: auto; /* Allow scrolling */
+    }
+    .wishlist-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
+    }
+    .wishlist-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: var(--radius);
+    }
+    .wishlist-item-info {
+        flex: 1;
+    }
+    .remove-from-wishlist {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    /* Profile Menu Dropdown */
+    .profile-menu {
+      position: absolute;
+      top: 100%; /* Position below the profile link */
+      right: 0; /* Align to the right edge of the profile link */
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      z-index: 1001; /* Ensure it appears above other content */
+      width: 150px; /* Adjust width as needed */
+      padding: 10px 0;
+      text-align: left;
+    }
+    .profile-menu a {
+        display: block;
+        padding: 8px 15px;
+        text-decoration: none;
+        color: var(--text);
+        font-size: 13px;
+    }
+    .profile-menu a:hover {
+        background-color: var(--light-bg);
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 1024px) {
+      .filters-and-products {
+        flex-direction: column;
+      }
+      .filters {
+        flex: none;
+      }
+    }
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; text-align: center; }
+      nav ul { justify-content: center; flex-wrap: wrap; }
+      .search-bar { justify-content: center; }
+      .product-grid-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+    @media (max-width: 480px) {
+      nav ul { gap: 10px; font-size: 12px; }
+      .user-actions { gap: 12px; }
+      .user-actions span { font-size: 11px; }
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+    }
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.payment-marquee:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="file:///C:/Users/Lebo/Documents/lbg/IMAGES%20FOR%20LBG/LOGO.png" alt="Layback Logo" />
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="join_our_team.html">Join our team</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="just_arrived.html">Just arrived</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="order_tracking.html">Track Order</a></li>
+            <li><a href="store_location.html">Stores</a></li>
+            <li><a href="gifts_promotions.html">Gifts & Promotions</a></li>
+            <li><a href="admin_page.html">Admin Panel</a></li>
+          </ul>
+        </nav>
+
+        <div class="user-actions">
+          <a href="#" class="login-register" onclick="openModal('loginModal')">
+            <i class="fas fa-user"></i>
+            <span>Login / Register</span>
+          </a>
+          <a href="#" class="cart" onclick="openModal('cartModal')">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+            <span class="cart-counter" id="cartCounter">0</span> <!-- Cart Counter -->
+          </a>
+          <a href="#" class="wishlist" onclick="openModal('wishlistModal')">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a href="#" class="profile" id="profileLink" onclick="toggleProfileMenu(event)">
+            <i class="fa-solid fa-user-check" id="profileIcon"></i>
+            <span id="profileDisplayText">Profile</span>
+            <div id="profileMenu" class="profile-menu" style="display: none;">
+                <a href="user_profile.html">View Profile</a>
+                <a href="#" onclick="handleLogout(); return false;">Logout</a>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    
+  <form class="search-bar">
+        <input type="text" placeholder="Search for products..." />
+        <select>
+          <option value="">SELECT CATEGORY</option>
+          <option value="accessories">ACCESSORIES</option>
+          <option value="layback-garments">LAYBACK GARMENTS</option>
+          <option value="tops-t-shirts">TOPS/T SHIRTS</option>
+          <option value="layback-bottoms">LAYBACK BOTTOMS</option>
+          <option value="tracksuits">TRACKSUITS</option>
+          <option value="layback-headwear">LAYBACK HEADWEAR</option>
+          <option value="Shoes">SHOES</option>
+          <option value="Chains">CHAINS</option>
+        </select>
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="home.html">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Shop</li>
+        </ol>
+      </nav>
+
+      <!-- Filters and Products -->
+      <div class="filters-and-products">
+        <!-- Filters -->
+        <aside class="filters">
+          <h3>Filter by price</h3>
+          <form>
+            <label for="price-range">Price:</label>
+            <input type="range" id="price-range" min="0" max="1800" step="100" value="1800" />
+            <p>Price: R0 — R<span id="price-max-display">1,800</span></p>
+            <button type="button" class="filter-button" onclick="applyFilters()">FILTER</button>
+            <button type="button" class="clear-filters-button" onclick="clearFilters()">CLEAR FILTERS</button>
+          </form>
+
+          <h3>Filter by color</h3>
+          <ul class="color-filters">
+            <li>
+              <label>
+                <input type="checkbox" value="beige" onchange="applyFilters()">
+                <span class="color-circle beige"></span>
+                Beige <span class="count">(4)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="black" onchange="applyFilters()">
+                <span class="color-circle black"></span>
+                Black <span class="count">(19)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="blue" onchange="applyFilters()">
+                <span class="color-circle blue"></span>
+                Blue <span class="count">(2)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="brown" onchange="applyFilters()">
+                <span class="color-circle brown"></span>
+                Brown <span class="count">(1)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="green" onchange="applyFilters()">
+                <span class="color-circle green"></span>
+                Green <span class="count">(5)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="grey" onchange="applyFilters()">
+                <span class="color-circle grey"></span>
+                Grey <span class="count">(2)</span>
+              </label>
+            </li>
+          </ul>
+
+          <h3>Filter by size</h3>
+          <ul class="size-filters">
+            <li>
+              <label>
+                <input type="checkbox" value="2xl" onchange="applyFilters()">
+                2XL <span class="count">(45)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="l" onchange="applyFilters()">
+                L <span class="count">(54)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="m" onchange="applyFilters()">
+                M <span class="count">(55)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="s" onchange="applyFilters()">
+                S <span class="count">(55)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="xl" onchange="applyFilters()">
+                XL <span class="count">(55)</span>
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="checkbox" value="xs" onchange="applyFilters()">
+                XS <span class="count">(20)</span>
+              </label>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Products -->
+        <section class="products">
+          <!-- Product Grid Controls -->
+          <div class="product-grid-controls">
+            <div class="pagination">
+              Show: 
+              <span class="current-page">9</span> /
+              <span class="total-pages">12</span> /
+              <span class="items-per-page">18</span> /
+              <span class="all-items">24</span>
+            </div>
+            <div class="view-options">
+              <button class="grid-view active"><i class="fas fa-th-large"></i></button>
+              <button class="list-view"><i class="fas fa-list"></i></button>
+            </div>
+            <div class="sorting">
+              <select onchange="sortProducts()">
+                <option value="default">Default sorting</option>
+                <option value="price-low-to-high">Price: Low to High</option>
+                <option value="price-high-to-low">Price: High to Low</option>
+                <option value="name-a-z">Name: A-Z</option>
+                <option value="name-z-a">Name: Z-A</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Product Grid -->
+          <div class="product-grid" id="productGrid">
+            <!-- Product 1 -->
+            <div class="product" data-price="250" data-colors="black" data-sizes="s,m,l">
+              <a href="product_details2.html">
+                 <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\P1.jpg" alt="3D AL Crew Neck Top">
+              </a>
+              <h3>3D AL Crew Neck Top</h3>
+              <p>TOPS/T SHIRTS</p>
+              <p>R250.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('3D AL Crew Neck Top', 'R250.00', 'C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\P1.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+
+
+            <!-- Product 2 -->
+            <div class="product" data-price="300" data-colors="beige" data-sizes="m,l,xl">
+              <a href="product_details4.html">
+                <img src="C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P3.jpg" alt="Beige Country Box T-Shirt" />
+              </a>
+              <h3>Beige Country Box T-Shirt</h3>
+              <p>TOPS/T SHIRTS</p>
+              <p>R300.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('Beige Country Box T-Shirt', 'R300.00', 'C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P3.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+
+            <!-- Product 4 -->
+            <div class="product" data-price="250" data-colors="beige" data-sizes="s,m,l">
+              <a href="product_details.html?product=beige-country-relaxed-shorts">
+                <img src="C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P4.jpg" alt="Beige Country Relaxed Shorts" />
+              </a>
+              <h3>Beige Country Relaxed Shorts</h3>
+              <p>LAYBACK BOTTOMS</p>
+              <p>R250.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('Beige Country Relaxed Shorts', 'R250.00', 'C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P4.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+
+            <!-- Product 5 -->
+            <div class="product" data-price="400" data-colors="beige" data-sizes="l,xl,2xl">
+              <a href="product_details3.html">
+                <img src="C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P5.jpg" alt="Beige DTMA" />
+              </a>
+              <h3>Beige DTMA</h3>
+              <p>LAYBACK BOTTOMS</p>
+              <p>R400.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('Beige DTMA', 'R400.00', 'C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P5.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+
+            <!-- Product 6 -->
+            <div class="product" data-price="450" data-colors="beige" data-sizes="s,m,l,xl">
+              <a href="product_details5.html">
+                <img src="C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P6.jpg" alt="Beige Layback Society" />
+              </a>
+              <h3>Beige Layback Society</h3>
+              <p>TOPS/T SHIRTS</p>
+              <p>R450.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('Beige Layback Society', 'R450.00', 'C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P6.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+
+            <!-- Product 7 -->
+            <div class="product" data-price="180" data-colors="black" data-sizes="one-size">
+              <a href="product_details6.html">
+                <img src="C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P7.jpg" alt="Black LBG basic 5 Panel" />
+              </a>
+              <h3>Black LBG basic 5 Panel</h3>
+              <p>LAYBACK HEADWEAR</p>
+              <p>R180.00</p>
+              <button class="wishlist-button" onclick="addToWishlist('Black LBG basic 5 Panel', 'R180.00', 'C:/Users/Lebo/Documents/lbg/IMAGES FOR LBG/P7.jpg')">
+                <i class="fas fa-heart"></i> Add to Wishlist
+              </button>
+            </div>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="pagination-controls">
+            <button class="pagination-btn" id="prevPageBtn" onclick="prevPage()" enable>Previous</button>
+            <button class="pagination-btn" id="nextPageBtn" onclick="nextPage()">Next</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>LAYBACK GARMENTS © 2023 DEVELOPED BY <a href="#">LayUp Devs</a></p>
+    </div>
+<!-- Payment Methods Marquee -->
+<div class="payment-marquee" style="
+  background: #f8f9fa;
+  padding: 12px 0;
+  overflow: hidden;
+">
+  <div class="marquee-inner" style="
+    display: flex;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  ">
+    <!-- Icons repeated twice for seamless loop -->
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+  </div>
+</div>
+
+  </footer>
+
+  <!-- Login/Register Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
+      </div>
+
+      <form id="login" class="tabcontent" style="display: block;">
+        <h2>Login</h2>
+        <p>Welcome back! Enter your credentials to log in.</p>
+        <label for="loginUsername"><i class="fas fa-user"></i> Email or Username:</label>
+        <input type="text" id="loginUsername" placeholder="Enter email or username" required />
+        <label for="loginPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required />
+        <button type="button" onclick="handleLogin()" class="btn-primary">Login</button>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </form>
+
+      <form id="register" class="tabcontent">
+        <h2>Register</h2>
+        <p>Create an account to enjoy exclusive benefits!</p>
+        <label for="registerName"><i class="fas fa-user"></i> Full Name:</label>
+        <input type="text" id="registerName" placeholder="Enter full name" required />
+        <label for="registerEmail"><i class="fas fa-envelope"></i> Email:</label>
+        <input type="email" id="registerEmail" placeholder="Enter email" required />
+        <label for="registerPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="registerPassword" placeholder="Enter password" required />
+        <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        <button type="button" onclick="handleRegister()" class="btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+
+
+
+    <script>
+    // Add state variable to store logged-in user data
+    let currentUser = null; // Will store { username: "...", firstName: "...", lastName: "..." } or null if not logged in
+
+    // Add state variable to store current cart data (from localStorage or API)
+    let currentCart = []; // Array of items [{id, name, price, image, quantity}]
+
+    // Function to handle successful login (call this after receiving a successful response from the server)
+    function onLoginSuccess(userData) {
+        // Store user data (you might receive more/less than just username, adjust accordingly)
+        currentUser = {
+            username: userData.username || userData.email, // Use username if available, fallback to email
+            firstName: userData.firstName || '', // Store other details if available
+            lastName: userData.lastName || ''
+        };
+
+        // Update the UI to show the user's name
+        updateProfileDisplay();
+
+        // Close the modal
+        closeModal('loginModal');
+    }
+
+    // Function to handle logout
+    function handleLogout() {
+        // Clear the stored user data
+        currentUser = null;
+
+        // Update the UI to show the default state
+        updateProfileDisplay();
+
+        // Optionally, redirect to a specific page or just update the view
+        // window.location.href = 'home.html'; // Example redirect
+        console.log("User logged out.");
+    }
+
+    // Function to update the profile link text/icon based on login status
+    function updateProfileDisplay() {
+        const profileDisplayText = document.getElementById('profileDisplayText');
+        const profileIcon = document.getElementById('profileIcon');
+        const profileMenu = document.getElementById('profileMenu');
+
+        if (currentUser) {
+            // User is logged in
+            // Option 1: Show full name (firstName lastName)
+            // profileDisplayText.textContent = `${currentUser.firstName} ${currentUser.lastName}`.trim() || currentUser.username;
+
+            // Option 2: Show just the username (as implemented below)
+            profileDisplayText.textContent = currentUser.username;
+
+            // Optionally change the icon back to a standard user icon if preferred when logged in
+            // profileIcon.className = 'fas fa-user'; // Example: Use standard user icon
+            profileIcon.className = 'fa-solid fa-user-check'; // Keep the check icon for logged-in state
+        } else {
+            // User is not logged in
+            profileDisplayText.textContent = 'Profile'; // Reset to default text
+            profileIcon.className = 'fa-solid fa-user-check'; // Or reset to default icon if needed
+        }
+
+        // Hide the profile menu when updating display (e.g., on logout)
+        if (profileMenu) {
+            profileMenu.style.display = 'none';
+        }
+    }
+
+    // Wishlist Function (Remain unchanged)
+    function addToWishlist(name, price, image) {
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      const product = { name, price, image };
+      const exists = wishlist.some(item => item.name === name);
+      if (exists) {
+        alert(name + " is already in your wishlist!");
+        return;
+      }
+      wishlist.push(product);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      alert(name + " has been added to your wishlist.");
+    }
+
+    // --- Updated Cart Functions ---
+
+    // Function to load cart data (from API if logged in, otherwise localStorage)
+    async function loadCart() {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            // User is logged in, fetch from API
+            try {
+                const response = await fetch('http://localhost:3000/api/cart', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `Server Error: ${response.status}`);
+                }
+
+                const apiCart = await response.json();
+                // Convert API response format to localStorage format if needed
+                // Assuming API returns {ProductID, Quantity, ProductName, Price, ImageUrl}
+                currentCart = apiCart.map(item => ({
+                    id: item.ProductID,
+                    name: item.ProductName,
+                    price: item.Price,
+                    image: item.ImageUrl,
+                    quantity: item.Quantity
+                }));
+
+            } catch (error) {
+                console.error('Error loading cart from API:', error);
+                // Fallback to localStorage if API fails
+                console.warn("Falling back to localStorage for cart.");
+                currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+            }
+        } else {
+            // User is not logged in, load from localStorage
+            currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+        }
+        updateCartDisplay(currentCart); // Update UI with loaded cart data
+    }
+
+    // Function to add an item to the cart (API or localStorage)
+    async function addToCart(productId, name, price, image) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            // Fallback to localStorage if not logged in
+            console.warn("User not logged in, using localStorage for cart.");
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: productId, name: name, price: price, image: image, quantity: 0 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart(); // Reload and update display
+            alert(`${name} added to cart!`);
+            return;
+        }
+
+        // User is logged in, use the API
+        try {
+            const response = await fetch('http://localhost:3000/api/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the JWT token
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: 1 // Add 1 to existing quantity
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Cart updated via API:", data);
+
+            // Reload the cart from the API to sync UI
+            await loadCart(); // Fetch the updated cart from the server
+
+        } catch (error) {
+            console.error('Error adding to cart via API:', error);
+            alert('Failed to add item to cart. Please try again.');
+        }
+    }
+
+    // Function to remove an item from the cart (API or localStorage)
+    async function removeFromCart(productId) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            // Fallback to localStorage if not logged in
+            console.warn("User not logged in, using localStorage for cart.");
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart(); // Reload and update display
+            return;
+        }
+
+        // User is logged in, use the API
+        try {
+            const response = await fetch(`http://localhost:3000/api/cart/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}` // Include the JWT token
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Cart item removed via API:", data);
+
+            // Reload the cart from the API to sync UI
+            await loadCart(); // Fetch the updated cart from the server
+
+        } catch (error) {
+            console.error('Error removing item from cart via API:', error);
+            alert('Failed to remove item from cart. Please try again.');
+        }
+    }
+
+    // Function to update the quantity of an item in the cart (API or localStorage)
+    async function updateCartQuantity(productId, newQuantity) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            // Fallback to localStorage if not logged in
+            console.warn("User not logged in, using localStorage for cart.");
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                if (newQuantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    item.quantity = newQuantity;
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    loadCart(); // Reload and update display
+                }
+            }
+            return;
+        }
+
+        // User is logged in, use the API
+        if (newQuantity <= 0) {
+            // If quantity becomes 0, remove the item
+            await removeFromCart(productId);
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/cart/${productId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` // Include the JWT token
+                },
+                body: JSON.stringify({
+                    quantity: newQuantity
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Cart item quantity updated via API:", data);
+
+            // Reload the cart from the API to sync UI
+            await loadCart(); // Fetch the updated cart from the server
+
+        } catch (error) {
+            console.error('Error updating cart item quantity via API:', error);
+            alert('Failed to update item quantity. Please try again.');
+        }
+    }
+
+    // Function to update the cart display (uses currentCart state)
+    function updateCartDisplay(cartData = currentCart) { // Accept cart data as argument
+        const counterElement = document.getElementById('cartCounter');
+        const totalItems = cartData.reduce((total, item) => total + item.quantity, 0);
+        const totalValue = cartData.reduce((total, item) => total + (item.price * item.quantity), 0).toFixed(2);
+
+        // Update counter
+        counterElement.textContent = totalItems;
+        counterElement.style.display = totalItems > 0 ? 'flex' : 'none';
+
+        // Update cart modal content
+        const container = document.getElementById('cartItemsContainer');
+        const totalElement = document.getElementById('cartTotal');
+        const emptyMessage = document.getElementById('emptyCartMessage');
+
+        if (cartData.length === 0) {
+            container.innerHTML = '<p id="emptyCartMessage">Your cart is empty.</p>';
+            emptyMessage = document.getElementById('emptyCartMessage'); // Re-select after innerHTML change
+            emptyMessage.style.display = 'block';
+            totalElement.textContent = '0.00';
+            return;
+        }
+
+        emptyMessage.style.display = 'none'; // Hide empty message if items exist
+        container.innerHTML = ''; // Clear existing items
+
+        cartData.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'cart-item';
+            itemElement.innerHTML = `
+                <div class="cart-item-info">
+                    <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                    <span>${item.name}</span>
+                </div>
+                <div class="cart-item-actions">
+                    <span>R ${item.price.toFixed(2)}</span>
+                    <input type="number" class="cart-item-quantity" value="${item.quantity}" min="1" onchange="updateCartQuantity('${item.id}', this.value)" />
+                    <button class="remove-from-cart" onclick="removeFromCart('${item.id}')">Remove</button>
+                </div>
+            `;
+            container.appendChild(itemElement);
+        });
+        totalElement.textContent = totalValue;
+    }
+
+    // Filter Functions (Remain unchanged)
+    const originalProducts = Array.from(document.querySelectorAll('.product-grid .product'));
+    const priceRange = document.getElementById('price-range');
+    const priceDisplay = document.getElementById('price-max-display');
+
+    priceRange.addEventListener('input', function() {
+      priceDisplay.textContent = this.value.toLocaleString();
+    });
+
+    function applyFilters() {
+      const maxPrice = parseInt(priceRange.value);
+      const selectedColors = Array.from(document.querySelectorAll('.color-filters input:checked')).map(cb => cb.value);
+      const selectedSizes = Array.from(document.querySelectorAll('.size-filters input:checked')).map(cb => cb.value);
+
+      // Iterate through ALL original products
+      originalProducts.forEach(product => {
+        const price = parseInt(product.getAttribute('data-price'));
+        const colors = product.getAttribute('data-colors').split(',').map(c => c.trim()); // Trim whitespace
+        const sizes = product.getAttribute('data-sizes').split(',').map(s => s.trim());   // Trim whitespace
+
+        const priceMatch = price <= maxPrice;
+        const colorMatch = selectedColors.length === 0 || selectedColors.some(c => colors.includes(c));
+        const sizeMatch = selectedSizes.length === 0 || selectedSizes.some(s => sizes.includes(s));
+
+        // Apply filter result: show if matches, hide if not
+        if (priceMatch && colorMatch && sizeMatch) {
+            product.style.display = 'block'; // Show if it passes all filters
+        } else {
+            product.style.display = 'none';  // Hide if it fails any filter
+        }
+      });
+
+      // Reset pagination after filter
+      currentPage = 1;
+      showCurrentPage();
+    }
+
+    function clearFilters() {
+      // Reset range slider
+      priceRange.value = 1800;
+      priceDisplay.textContent = '1,800';
+
+      // Uncheck all checkboxes
+      document.querySelectorAll('.color-filters input, .size-filters input').forEach(cb => cb.checked = false);
+
+      // Show all original products
+      originalProducts.forEach(p => p.style.display = 'block');
+
+      // Reset pagination
+      currentPage = 1;
+      showCurrentPage();
+    }
+
+    // Pagination Functions (Remain unchanged)
+    const productsPerPage = 6; // Show 6 products per page
+    let currentPage = 1;
+
+    function updatePaginationButtons() {
+        // Count how many products are currently *visibly* displayed (not hidden by filters)
+        const visibleProducts = originalProducts.filter(p => p.style.display !== 'none');
+        const totalPages = Math.ceil(visibleProducts.length / productsPerPage);
+        document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+        document.getElementById('nextPageBtn').disabled = currentPage >= totalPages;
+    }
+
+    function showCurrentPage() {
+        // Get the list of products that are currently visible after filtering
+        const visibleProducts = originalProducts.filter(p => p.style.display !== 'none');
+
+        const startIndex = (currentPage - 1) * productsPerPage;
+        const endIndex = startIndex + productsPerPage;
+
+        // Hide ALL original products first
+        originalProducts.forEach(p => p.style.display = 'none');
+
+        // Then show only the ones belonging to the current page *from the filtered list*
+        for (let i = startIndex; i < endIndex && i < visibleProducts.length; i++) {
+            visibleProducts[i].style.display = 'block'; // Show the specific product for this page
+        }
+
+        updatePaginationButtons();
+    }
+
+    function nextPage() {
+        // Calculate total pages based on current visible products
+        const visibleProducts = originalProducts.filter(p => p.style.display !== 'none');
+        const totalPages = Math.ceil(visibleProducts.length / productsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            showCurrentPage();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            showCurrentPage();
+        }
+    }
+
+    // Initial setup: Show first page based on initial filter state (all visible)
+    window.onload = function() {
+        // Ensure all products are visible initially before pagination kicks in
+        originalProducts.forEach(p => p.style.display = 'block');
+        currentPage = 1; // Reset to page 1
+        showCurrentPage(); // Apply initial pagination (show first 6 visible ones)
+
+        // Initialize profile display based on current state
+        updateProfileDisplay();
+
+        // Initialize cart display by loading data first
+        loadCart(); // Load cart data from API or localStorage and update UI
+    };
+
+    // Modal Functions (Remain unchanged)
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    function openTab(evt, tabName) {
+      const tabcontent = document.querySelectorAll(".tabcontent");
+      tabcontent.forEach(tab => tab.style.display = "none");
+
+      const tablinks = document.querySelectorAll(".tablinks");
+      tablinks.forEach(tab => tab.classList.remove("active"));
+
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.classList.add("active");
+    }
+
+    // Updated handleLogin function
+    function handleLogin() {
+      const usernameOrEmail = document.getElementById("loginUsername").value;
+      const password = document.getElementById("loginPassword").value;
+
+      if (!usernameOrEmail || !password) {
+        alert("Please enter your username/email and password.");
+        return;
+      }
+
+      // --- Fetch Call for Login ---
+      fetch('http://localhost:3000/api/login', { // Replace with your actual login endpoint
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: usernameOrEmail, // Or email, depending on your server expectation
+            password: password
+        })
+      })
+      .then(response => {
+          console.log("Login fetch response status:", response.status);
+          if (!response.ok) {
+              return response.text().then(text => {
+                  try {
+                      const errorData = JSON.parse(text);
+                      throw new Error(errorData.error || `Server Error: ${response.status}`);
+                  } catch (e) {
+                      console.error("Raw server error response:", text);
+                      throw new Error(`Server Error: ${response.status} - ${text || response.statusText}`);
+                  }
+              });
+          }
+          return response.json();
+      })
+      .then(data => {
+          console.log("Login successful response:", data);
+          // Assuming the server returns user data like { user: { username: "...", firstName: "...", ... } } on successful login
+          if (data.user) { // Adjust based on your server's response structure
+            // Store the token (assuming the server returns one)
+            if (data.token) {
+                localStorage.setItem('authToken', data.token); // Store the token
+            }
+            onLoginSuccess(data.user); // Call the function to update UI
+            alert(data.message || `Welcome back, ${data.user.username}!`); // Optional welcome message
+          } else {
+            // Handle case where response is successful but doesn't contain user data as expected
+            console.error("Login successful but user data not found in response:", data);
+            alert("Login successful, but could not retrieve user details.");
+          }
+      })
+      .catch(error => {
+          console.error('Login error:', error);
+          alert('Login failed: ' + error.message);
+      });
+      // --- End Fetch Call ---
+    }
+
+    // Updated handleRegister function (remains largely the same, but calls onLoginSuccess if auto-login after registration is desired)
+    function handleRegister() {
+        const name = document.getElementById("registerName").value.trim();
+        const email = document.getElementById("registerEmail").value.trim();
+        const pass = document.getElementById("registerPassword").value.trim();
+        const confirm = document.getElementById("confirmPassword").value.trim();
+
+        if (!name || !email || !pass || !confirm) {
+            alert("Please fill all fields.");
+            return;
+        }
+        if (pass !== confirm) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        const nameParts = name.split(/\s+/);
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        const userData = {
+            username: name,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: pass
+        };
+
+        fetch('http://localhost:3000/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => {
+            console.log("Fetch response status:", response.status);
+            if (!response.ok) {
+                return response.text().then(text => {
+                    try {
+                        const errorData = JSON.parse(text);
+                        throw new Error(errorData.error || `Server Error: ${response.status}`);
+                    } catch (e) {
+                        console.error("Raw server error response:", text);
+                        throw new Error(`Server Error: ${response.status} - ${text || response.statusText}`);
+                    }
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Registration successful response:", data);
+            alert(data.message || 'Registration successful!');
+
+            // Optionally, automatically log the user in after successful registration
+            // This requires your server to return user data or a token upon successful registration
+            // For simplicity here, we'll just reset the form and switch to the login tab
+            document.getElementById("register").reset();
+            openTab({ currentTarget: document.querySelector('.tablinks:nth-of-type(1)') }, 'login'); // Switch to Login tab
+
+            // If your server returns user data and a token upon registration and you want to auto-login:
+            // if (data.user && data.token) { // Adjust based on your server's response structure
+            //     localStorage.setItem('authToken', data.token); // Store the token
+            //     onLoginSuccess(data.user);
+            //     alert(`Welcome, ${data.user.username}! Registration successful and logged in.`);
+            // }
+        })
+        .catch(error => {
+            console.error('Registration error:', error);
+            alert('Registration failed: ' + error.message);
+        });
+    }
+
+    // Function to toggle the profile dropdown menu
+    function toggleProfileMenu(event) {
+        event.preventDefault(); // Prevent default link behavior
+        const profileMenu = document.getElementById('profileMenu');
+        if (profileMenu) {
+            // Hide other menus if open (optional, if you add more dropdowns)
+            // Example: document.querySelectorAll('.other-menu').forEach(m => m.style.display = 'none');
+            profileMenu.style.display = profileMenu.style.display === 'block' ? 'none' : 'block';
+        }
+    }
+
+    // Close dropdown if clicked outside
+    window.onclick = function(event) {
+        const modal = document.getElementById("loginModal");
+        if (event.target === modal) closeModal();
+
+        // Close profile menu if clicked outside
+        const profileLink = document.getElementById('profileLink');
+        const profileMenu = document.getElementById('profileMenu');
+        if (profileMenu && profileLink && !profileLink.contains(event.target)) {
+            profileMenu.style.display = 'none';
+        }
+    };
+
+  </script>
+</body>
+</html>

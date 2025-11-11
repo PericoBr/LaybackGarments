@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width); /* Offset for fixed sidebar */
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width)); /* Adjust container width */
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      color: white;
+      font-size: 1.5rem;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width); /* Offset for sidebar */
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN CONTENT =============== */
+    main {
+      padding-top: 80px; /* Offset for fixed header */
+      padding-bottom: 20px;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .dashboard-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .dashboard-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .stat-card {
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .stat-card .label {
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Dashboard Content Grid */
+    .dashboard-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr; /* Orders on left, activity on right */
+      gap: 20px;
+    }
+
+    /* Order Management */
+    .order-management h2,
+    .activity-log h2 {
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .status-tag {
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .status-tag.pending { background: #ffcc00; color: #000; }
+    .status-tag.processing { background: #007bff; color: white; }
+    .status-tag.shipped { background: #28a745; color: white; }
+    .status-tag.delivered { background: #17a2b8; color: white; }
+    .status-tag.cancelled { background: #dc3545; color: white; }
+    .actions button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .actions .view-btn { background: var(--primary); color: white; }
+
+    /* Activity Log */
+    .activity-log ul {
+      list-style: none;
+      padding: 0;
+    }
+    .activity-log li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .activity-log .icon {
+      width: 30px;
+      height: 30px;
+      background: var(--light-bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .activity-log .icon i {
+      color: var(--primary);
+    }
+    .activity-log .detail {
+      flex: 1;
+    }
+    .activity-log .time {
+      color: #666;
+      font-size: 0.85rem;
+    }
+
+    /* User Management Section */
+    .user-management {
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 30px; /* Add some space above the section */
+    }
+    .user-management h2 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .user-list {
+      list-style: none;
+      padding: 0;
+    }
+    .user-list li {
+      padding: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .user-info {
+      flex-grow: 1; /* Allow user details to take available space */
+    }
+    .user-role {
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 10px; /* Space between role and buttons */
+    }
+    .user-role.admin { background: #dc3545; color: white; } /* Red for Admin */
+    .user-role.user { background: #6c757d; color: white; } /* Grey for User */
+    .user-actions button {
+      margin-left: 5px; /* Space between buttons */
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .grant-admin-btn { background: #28a745; color: white; } /* Green for Grant */
+    .revoke-admin-btn { background: #ffc107; color: #000; } /* Yellow for Revoke */
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width); /* Offset for sidebar */
+      right: 0;
+      z-index: 997;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* =============== MODAL =============== */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+    }
+    .modal-content {
+      background: white;
+      margin: 10% auto;
+      padding: 30px;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      position: relative;
+    }
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .tab {
+      display: flex;
+      margin-bottom: 20px;
+    }
+    .tab button {
+      padding: 10px 20px;
+      background: #eee;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .tab button.active {
+      background: var(--primary);
+      color: white;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent[style*="block"] {
+      display: block !important;
+    }
+    .tabcontent input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .tabcontent button {
+      background: var(--primary);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+      .dashboard-content { grid-template-columns: 1fr; } /* Stack on smaller screens */
+    }
+    @media (max-width: 480px) {
+      nav ul { gap: 10px; font-size: 12px; }
+      .user-actions { gap: 12px; }
+      .user-actions span { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <!-- Updated image path -->
+      <img src="./LaybackGarments/public/images/LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30" alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Content -->
+  <main>
+    <div class="container">
+      <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <div class="dashboard-actions">
+          <button onclick="location.reload();"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="number">128</div>
+          <div class="label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">R 24,560</div>
+          <div class="label">Total Revenue</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">42</div>
+          <div class="label">Pending Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="number">18</div>
+          <div class="label">New Customers</div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content Grid -->
+      <div class="dashboard-content">
+        <!-- Order Management -->
+        <section class="order-management">
+          <h2>Recent Orders</h2>
+          <table id="ordersTable">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Total</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr><td colspan="6" style="text-align: center;">Loading orders...</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <!-- Activity Log -->
+        <section class="activity-log">
+          <h2>Recent Activity</h2>
+          <ul>
+            <li>
+              <div class="icon"><i class="fas fa-shopping-cart"></i></div>
+              <div class="detail">New order #1004 received from Alice Williams</div>
+              <div class="time">10 mins ago</div>
+            </li>
+            <li>
+              <div class="icon"><i class="fas fa-user-plus"></i></div>
+              <div class="detail">New customer registered: Charlie Brown</div>
+              <div class="time">1 hour ago</div>
+            </li>
+            <li>
+              <div class="icon"><i class="fas fa-box-open"></i></div>
+              <div class="detail">Order #1001 has been shipped</div>
+              <div class="time">2 hours ago</div>
+            </li>
+            <li>
+              <div class="icon"><i class="fas fa-tag"></i></div>
+              <div class="detail">New product added: "L3 Tracksuit Black Set"</div>
+              <div class="time">Yesterday</div>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- User Management Section -->
+      <section class="user-management">
+        <h2>User Management</h2>
+        <button id="loadUsersBtn">Load Users</button>
+        <ul id="usersList" class="user-list">
+          <li><p>Loading users...</p></li>
+        </ul>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Login/Register Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+
+      <div class="tab">
+        <button class="tablinks active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tablinks" onclick="openTab(event, 'register')">Register</button>
+      </div>
+
+      <form id="login" class="tabcontent" style="display: block;">
+        <h2>Login</h2>
+        <p>Welcome back! Enter your credentials to log in.</p>
+        <label for="loginUsername"><i class="fas fa-user"></i> Email or Username:</label>
+        <input type="text" id="loginUsername" placeholder="Enter email or username" required />
+        <label for="loginPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="loginPassword" placeholder="Enter password" required />
+        <button type="button" onclick="handleLogin()" class="btn-primary">Login</button>
+        <a href="#" class="forgot-password">Forgot Password?</a>
+      </form>
+
+      <form id="register" class="tabcontent">
+        <h2>Register</h2>
+        <p>Create an account to enjoy exclusive benefits!</p>
+        <label for="registerName"><i class="fas fa-user"></i> Full Name:</label>
+        <input type="text" id="registerName" placeholder="Enter full name" required />
+        <label for="registerEmail"><i class="fas fa-envelope"></i> Email:</label>
+        <input type="email" id="registerEmail" placeholder="Enter email" required />
+        <label for="registerPassword"><i class="fas fa-lock"></i> Password:</label>
+        <input type="password" id="registerPassword" placeholder="Enter password" required />
+        <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password:</label>
+        <input type="password" id="confirmPassword" placeholder="Confirm password" required />
+        <button type="button" onclick="handleRegister()" class="btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // --- ENHANCED MODAL AND AUTHENTICATION LOGIC ---
+    // Modal Functions (Remain unchanged)
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("loginModal").style.display = "none";
+    }
+
+    function openTab(evt, tabName) {
+        const tabcontent = document.querySelectorAll(".tabcontent");
+        tabcontent.forEach(tab => tab.style.display = "none");
+
+        const tablinks = document.querySelectorAll(".tablinks");
+        tablinks.forEach(tab => tab.classList.remove("active"));
+
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+    }
+
+    // --- ENHANCED LOGIN FUNCTION ---
+    async function handleLogin() {
+        const username = document.getElementById("loginUsername").value.trim();
+        const password = document.getElementById("loginPassword").value;
+
+        if (!username || !password) {
+            alert("Please enter your email/username and password.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/admin/login', { // Or your general login endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }), // Or use email if your backend accepts it
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Login failed');
+            }
+
+            const data = await response.json();
+            console.log("Login successful:", data);
+
+            // Store the token and user info in localStorage (or sessionStorage)
+            localStorage.setItem('adminToken', data.token); // Or 'authToken' consistently
+            localStorage.setItem('userRole', data.user.role); // Store role if needed for UI logic
+            localStorage.setItem('username', data.user.username); // Store username if needed for UI
+
+            alert(`Welcome back, ${data.user.username}!`); // Or redirect
+            closeModal();
+
+            // Optional: Redirect user based on role or previous location
+            // window.location.href = 'dashboard.html'; // Or wherever appropriate
+
+        } catch (err) {
+            console.error('Login error:', err);
+            alert('Login failed: ' + err.message);
+        }
+    }
+    // --- END ENHANCED LOGIN FUNCTION ---
+
+    // --- ENHANCED REGISTER FUNCTION ---
+    async function handleRegister() {
+        const name = document.getElementById("registerName").value.trim();
+        const email = document.getElementById("registerEmail").value.trim();
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (!name || !email || !password || !confirmPassword) {
+            alert("Please fill all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // Basic client-side validation for email format (optional but recommended)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: email, firstName: name.split(' ')[0], lastName: name.split(' ').slice(1).join(' '), email, password }), // Adjust field names if necessary
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Registration failed');
+            }
+
+            const data = await response.json();
+            console.log("Registration successful:", data);
+
+            alert(`Account created successfully for ${name}!`);
+            // Clear the registration form
+            document.getElementById("register").reset();
+            // Switch back to the login tab
+            openTab({ currentTarget: document.querySelector('.tablinks') }, 'login');
+
+        } catch (err) {
+            console.error('Registration error:', err);
+            alert('Registration failed: ' + err.message);
+        }
+    }
+    // --- END ENHANCED REGISTER FUNCTION ---
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("loginModal");
+        if (event.target === modal) closeModal();
+    };
+
+    // --- NEW: Check Authentication and Update UI ---
+    function updateAuthUI() {
+        const token = localStorage.getItem('adminToken'); // Or 'authToken' consistently
+        const username = localStorage.getItem('username');
+        const loginRegisterLink = document.querySelector('.login-register');
+        const usernameDisplay = document.getElementById('username-display'); // Target the span for username
+        const authStatusText = document.getElementById('auth-status-text'); // Target the span for login/logout text
+
+        if (token && username) {
+            // User is logged in
+            authStatusText.textContent = 'Logout'; // Change link text to "Logout"
+            loginRegisterLink.onclick = function() { handleLogout(); }; // Change click handler
+            usernameDisplay.textContent = username; // Show username in profile link
+            // Optionally, disable/hide register-only links if needed based on role
+        } else {
+            // User is not logged in
+            authStatusText.textContent = 'Login / Register'; // Reset link text
+            loginRegisterLink.onclick = function() { openModal('loginModal'); };
+            usernameDisplay.textContent = 'Profile'; // Reset profile link text
+        }
+    }
+
+    function handleLogout() {
+        // Clear tokens and user info from localStorage
+        localStorage.removeItem('adminToken'); // Or 'authToken' consistently
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('username');
+        console.log("User logged out.");
+        // Update the UI
+        updateAuthUI();
+        // Optionally, redirect or show a message
+        alert("You have been logged out.");
+    }
+
+    // Call updateAuthUI when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        updateAuthUI(); // Update UI on initial load
+    });
+    // --- END NEW: Check Authentication and Update UI ---
+
+    // --- NEW: Load Orders from Backend ---
+    async function loadOrders() {
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        ordersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Loading orders...</td></tr>'; // Show loading state
+
+        try {
+            const response = await fetch('http://localhost:3000/api/orders', { // Fetch orders from your backend
+                 headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // Include admin token
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const orders = await response.json();
+            console.log("Orders fetched:", orders); // Log for debugging
+
+            ordersTableBody.innerHTML = ''; // Clear loading message
+
+            if (orders.length === 0) {
+                ordersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No orders found.</td></tr>';
+                return;
+            }
+
+            orders.forEach(order => {
+                const row = document.createElement('tr');
+                // Format the date for display (using South African locale as an example)
+                const orderDate = new Date(order.OrderDate).toLocaleDateString('en-ZA');
+                // Format the total amount (assuming TotalAmount exists in the order object)
+                const totalAmount = order.TotalAmount ? `R ${parseFloat(order.TotalAmount).toFixed(2)}` : 'N/A';
+
+                row.innerHTML = `
+                    <td>#${order.OrderID}</td>
+                    <td>${order.FirstName || 'N/A'} ${order.LastName || 'N/A'}</td>
+                    <td><span class="status-tag ${order.OrderStatus?.toLowerCase() || 'unknown'}">${order.OrderStatus || 'Unknown'}</span></td>
+                    <td><span class="status-tag ${order.PaymentStatus?.toLowerCase() || 'unknown'}">${order.PaymentStatus || 'Unknown'}</span></td>
+                    <td>${totalAmount}</td>
+                    <td class="actions">
+                        <button class="view-btn" onclick="viewOrder(${order.OrderID})">View</button>
+                        <!-- Add other action buttons like Approve, Ship, etc. later -->
+                    </td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error('Error loading orders:', error);
+            ordersTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: red;">Error loading orders: ${error.message}</td></tr>`;
+        }
+    }
+    // --- END NEW: Load Orders Function ---
+
+    // --- NEW: Load Users from Backend and Manage Roles ---
+    async function loadUsers() {
+        const usersList = document.getElementById('usersList');
+        usersList.innerHTML = '<li><p>Loading users...</p></li>'; // Show loading state
+
+        try {
+            const response = await fetch('http://localhost:3000/api/users', { // Fetch users from your backend
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // Include admin token
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const users = await response.json();
+            console.log("Users fetched:", users); // Log for debugging
+
+            usersList.innerHTML = ''; // Clear loading message
+
+            if (users.length === 0) {
+                usersList.innerHTML = '<li><p>No users found.</p></li>';
+                return;
+            }
+
+            // Get the current admin's user ID to prevent revoking their own rights easily
+            let currentAdminId = null;
+            try {
+                const tokenPayload = localStorage.getItem('adminToken').split('.')[1]; // Get payload part of JWT
+                const decodedPayload = atob(tokenPayload); // Decode base64
+                const payloadObj = JSON.parse(decodedPayload); // Parse JSON
+                currentAdminId = payloadObj.userId; // Adjust 'userId' key based on your JWT payload structure
+            } catch (e) {
+                console.error("Could not decode admin token to get ID:", e);
+                // If decoding fails, you might not be able to prevent self-revocation easily here,
+                // but the backend should always perform this check rigorously.
+                // Alert the user or log out.
+                alert("Session error. Please log in again.");
+                // window.location.href = 'admin_login.html'; // Example redirect
+                return; // Stop execution if token is invalid/unreadable
+            }
+
+            users.forEach(user => {
+                const listItem = document.createElement('li');
+                const roleClass = user.Role === 'Admin' ? 'admin' : 'user';
+                const roleText = user.Role || 'User'; // Default to 'User' if role is null/undefined
+
+                // Determine action button(s)
+                let adminActionBtn = '';
+                if (user.Role !== 'Admin') {
+                    // Show "Grant Admin" button if user is not an admin
+                    adminActionBtn = `<button class="grant-admin-btn" onclick="grantAdmin(${user.UserID})">Grant Admin</button>`;
+                } else if (user.UserID != currentAdminId) { // Use != for string/number comparison
+                    // Show "Revoke Admin" button if user is an admin AND it's not the current user
+                    adminActionBtn = `<button class="revoke-admin-btn" onclick="revokeAdmin(${user.UserID})">Revoke Admin</button>`;
+                }
+                // If user is Admin and matches currentAdminId, no action button is shown
+
+                listItem.innerHTML = `
+                    <div class="user-info">
+                        <strong>${user.Username || user.Email}</strong> (ID: ${user.UserID}) - ${user.FirstName || ''} ${user.LastName || ''}
+                    </div>
+                    <div>
+                        <span class="user-role ${roleClass}">${roleText}</span>
+                        ${adminActionBtn}
+                    </div>
+                `;
+                usersList.appendChild(listItem);
+            });
+
+        } catch (error) {
+            console.error('Error loading users:', error);
+            usersList.innerHTML = `<li><p style="color: red;">Error loading users: ${error.message}</p></li>`;
+        }
+    }
+
+    // Function to grant admin privileges
+    async function grantAdmin(userId) {
+        if (!confirm(`Are you sure you want to grant admin privileges to user ID ${userId}?`)) {
+            return; // Exit if user cancels
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/grant-admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // Include admin token
+                },
+                body: JSON.stringify({ targetUserId: userId }) // Send the ID of the user to promote
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Grant admin response:", data);
+            alert(data.message); // Show success message from backend
+            loadUsers(); // Reload the user list to reflect the change
+
+        } catch (error) {
+            console.error('Error granting admin:', error);
+            alert('Failed to grant admin privileges: ' + error.message);
+        }
+    }
+
+    // Function to revoke admin privileges
+    async function revokeAdmin(userId) {
+        if (!confirm(`Are you sure you want to revoke admin privileges from user ID ${userId}?`)) {
+            return; // Exit if user cancels
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/revoke-admin/${userId}`, {
+                method: 'PUT', // Use PUT or PATCH as appropriate
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('adminToken')}` // Include admin token
+                }
+                // Body is not needed if ID is in URL, but backend expects it in body for POST / PUT
+                // body: JSON.stringify({ targetUserId: userId }) // If backend requires body for PUT
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server Error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log("Revoke admin response:", data);
+            alert(data.message); // Show success message from backend
+            loadUsers(); // Reload the user list to reflect the change
+
+        } catch (error) {
+            console.error('Error revoking admin:', error);
+            alert('Failed to revoke admin privileges: ' + error.message);
+        }
+    }
+    // --- END NEW: User Management Functions ---
+
+    // Call loadOrders and loadUsers when the page loads (after checking auth)
+    document.addEventListener('DOMContentLoaded', function() {
+        updateAuthUI(); // Update UI first
+        // Only load data if authenticated
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            loadOrders(); // Load orders on initial load (if authenticated)
+            // Optionally load users on initial load as well
+            // loadUsers();
+        }
+    });
+
+    // Add event listener to the "Load Users" button
+    document.getElementById('loadUsersBtn').addEventListener('click', loadUsers);
+
+    // Placeholder functions for other actions
+    function viewOrder(orderId) {
+        alert(`Viewing details for Order ID: ${orderId}`); // Replace with actual navigation
+        // Example: window.location.href = `order_details.html?orderId=${orderId}`;
+    }
+    function approveOrder(orderId) {
+        alert(`Approving order ${orderId}`); // Replace with API call
+    }
+    function shipOrder(orderId) {
+        alert(`Marking order ${orderId} as shipped`); // Replace with API call
+    }
+    function notifyCustomer(orderId) {
+        alert(`Sending notification for order ${orderId}`); // Replace with API call
+    }
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports - Admin Panel - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com    " />
+  <link rel="preconnect" href="https://fonts.gstatic.com    " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="    https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css    " />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN REPORTS =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .reports-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .reports-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .reports-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    .report-section {
+      background: var(--white);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .report-section h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--light-bg);
+      padding: 15px;
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    .stat-card .number {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .stat-card .label {
+      color: #666;
+      margin-top: 5px;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px; /* Adjust height as needed */
+        margin-top: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Check for admin token on page load -->
+  <script>
+    window.onload = function() {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            // Redirect to login if no token found
+            window.location.href = 'admin_login.html';
+        } else {
+            // Optional: Verify token is still valid by making a simple request
+            // For now, just ensure the token is present.
+            // You might want to call a 'verify' endpoint later.
+        }
+    };
+  </script>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html" class="active"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30    " alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Reports Content -->
+  <main>
+    <div class="container">
+      <div class="reports-header">
+        <h1>Reports & Analytics</h1>
+        <div class="reports-actions">
+          <button onclick="generateReport()"><i class="fas fa-file-pdf"></i> Generate PDF</button>
+        </div>
+      </div>
+
+      <!-- Summary Stats -->
+      <div class="report-section">
+        <h3>Summary</h3>
+        <div class="stats-grid" id="summaryStats">
+          <!-- Stats will be loaded here -->
+          <div class="stat-card"><div class="number">...</div><div class="label">Loading...</div></div>
+          <div class="stat-card"><div class="number">...</div><div class="label">Loading...</div></div>
+          <div class="stat-card"><div class="number">...</div><div class="label">Loading...</div></div>
+          <div class="stat-card"><div class="number">...</div><div class="label">Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- Revenue Chart -->
+      <div class="report-section">
+        <h3>Revenue Chart</h3>
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Top Products -->
+      <div class="report-section">
+        <h3>Top Selling Products</h3>
+        <table id="topProductsTable">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Units Sold</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody id="topProductsTableBody">
+            <!-- Products will be loaded here -->
+            <tr><td colspan="3" style="text-align: center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Customer Activity Chart -->
+      <div class="report-section">
+        <h3>Customer Activity</h3>
+        <div class="chart-container">
+          <canvas id="customerActivityChart"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Chart instances
+    let revenueChart = null;
+    let customerActivityChart = null;
+
+    // Function to load summary stats
+    async function loadSummaryStats() {
+        const summaryContainer = document.getElementById('summaryStats');
+        try {
+            const response = await fetch('http://localhost:3000/api/reports/summary');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+
+            summaryContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="number">${data.totalOrders}</div>
+                    <div class="label">Total Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">R ${data.totalRevenue?.toFixed(2) || '0.00'}</div>
+                    <div class="label">Total Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${data.pendingOrders}</div>
+                    <div class="label">Pending Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${data.newCustomers}</div>
+                    <div class="label">New Customers (Last 30 Days)</div>
+                </div>
+            `;
+
+        } catch (error) {
+            console.error('Error loading summary stats:', error);
+            summaryContainer.innerHTML = `<div class="stat-card"><div class="number">-</div><div class="label" style="color: red;">Error loading stats</div></div><div class="stat-card"></div><div class="stat-card"></div><div class="stat-card"></div>`;
+        }
+    }
+
+    // Function to load top products
+    async function loadTopProducts() {
+        const tableBody = document.getElementById('topProductsTableBody');
+        try {
+            const response = await fetch('http://localhost:3000/api/reports/top-products');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const products = await response.json();
+
+            if (products.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">No top products found.</td></tr>';
+                return;
+            }
+
+            tableBody.innerHTML = '';
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${product.ProductName}</td>
+                    <td>${product.UnitsSold}</td>
+                    <td>R ${product.Revenue?.toFixed(2) || '0.00'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error('Error loading top products:', error);
+            tableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: red;">Error loading top products</td></tr>`;
+        }
+    }
+
+    // Function to initialize charts (using dummy data for now)
+    function initCharts() {
+        // Dummy data for Revenue Chart - Replace with real data fetching logic
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        if (revenueChart) {
+            revenueChart.destroy(); // Destroy previous chart instance if it exists
+        }
+        revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Revenue (R)',
+                    data: [12000, 19000, 15000, 18000, 22000, 25000],
+                    borderColor: 'rgb(11, 102, 35)', // Primary color
+                    backgroundColor: 'rgba(11, 102, 35, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows control via CSS height
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Dummy data for Customer Activity Chart - Replace with real data fetching logic
+        const activityCtx = document.getElementById('customerActivityChart').getContext('2d');
+        if (customerActivityChart) {
+            customerActivityChart.destroy(); // Destroy previous chart instance if it exists
+        }
+        customerActivityChart = new Chart(activityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Customers',
+                    data: [12, 19, 15, 18, 22, 25],
+                    backgroundColor: 'rgba(11, 102, 35, 0.5)', // Primary color with transparency
+                    borderColor: 'rgb(11, 102, 35)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Allows control via CSS height
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Function to generate report (placeholder)
+    function generateReport() {
+        alert('Generating PDF report...');
+        // In a real app, trigger PDF generation logic
+        // This might involve sending data to the backend to generate a PDF file,
+        // or using a client-side library to generate a PDF from the current page/charts.
+    }
+
+    // Load data and initialize charts when the page loads
+    window.onload = function() {
+        loadSummaryStats();
+        loadTopProducts();
+        initCharts(); // Initialize charts with dummy data initially
+    };
+
+  </script>
+</body>
+</html>

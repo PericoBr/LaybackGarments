@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Layback Garments</title>
+    <!-- No need for Stripe.js -->
+    <style>
+        /* Add your styles here */
+        body { font-family: Arial, sans-serif; }
+        #payment-form { max-width: 500px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; }
+        .form-row { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; }
+        input, button { width: 100%; padding: 8px; margin-top: 5px; }
+        #error-message { color: red; margin-top: 10px; }
+        #success-message { color: green; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="payment-form">
+        <h2>Checkout</h2>
+        <div id="order-summary">
+            <!-- Order summary will be loaded here -->
+        </div>
+        <form id="payment-form-element">
+            <div class="form-row">
+                <label for="email">Email (for receipt)</label>
+                <input id="email" type="email" placeholder="Enter your email" required>
+            </div>
+            <!-- Paystack Elements are not used here like Stripe Elements -->
+            <!-- Instead, we'll just have the email input and a Pay Now button -->
+            <button id="submit" type="submit">Pay Now</button>
+            <div id="error-message"></div>
+            <div id="success-message" style="display: none;">Redirecting to payment...</div> <!-- Changed message -->
+        </form>
+    </div>
+
+    <script>
+        // Fetch cart items from localStorage (or from a persisted backend cart API)
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert("Your cart is empty. Cannot proceed to checkout.");
+            window.location.href = 'shop.html'; // Redirect if cart is empty
+        }
+
+        // Display order summary (basic example)
+        const orderSummaryDiv = document.getElementById('order-summary');
+        let summaryHtml = '<h3>Order Summary</h3><ul>';
+        let total = 0;
+        cart.forEach(item => {
+            summaryHtml += `<li>${item.name} x ${item.quantity} = R ${(item.price * item.quantity).toFixed(2)}</li>`;
+            total += item.price * item.quantity;
+        });
+        summaryHtml += `</ul><p><strong>Total: R ${total.toFixed(2)}</strong></p>`;
+        orderSummaryDiv.innerHTML = summaryHtml;
+
+        const form = document.getElementById('payment-form-element');
+        const submitButton = document.getElementById('submit');
+        const errorMessage = document.getElementById('error-message');
+        const successMessage = document.getElementById('success-message');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // Disable the submit button to prevent multiple clicks
+            submitButton.disabled = true;
+            errorMessage.textContent = ""; // Clear previous errors
+            successMessage.style.display = 'none'; // Hide success message
+
+            const email = document.getElementById('email').value;
+            // Calculate total amount in kobo (1 ZAR = 100 kobo)
+            const totalAmountInZAR = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const amountInKobo = Math.round(totalAmountInZAR * 100); // Convert to kobo
+
+            try {
+                // Step 1: Initialize the transaction on your server using Paystack route
+                const response = await fetch('http://localhost:3000/api/paystack/initialize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Include auth token if needed for admin routes, or remove if public
+                        // 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                    },
+                    body: JSON.stringify({
+                        email: email, // Customer's email
+                        amount: amountInKobo, // Amount in kobo
+                        // You might need to pass the order ID here if you create it first
+                        // orderId: orderIdFromBackend // Example: await createOrderOnBackend(cart, email)
+                        orderId: "temp_order_id_" + Date.now() // Placeholder, ideally create order first
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `Server Error: ${response.status}`);
+                }
+
+                const { authorization_url, reference } = await response.json();
+
+                console.log("Paystack authorization URL received:", authorization_url);
+                console.log("Transaction reference:", reference);
+
+                // Step 2: Redirect the user to the Paystack authorization URL
+                // Paystack will handle the payment details on their secure page
+                window.location.href = authorization_url;
+
+            } catch (err) {
+                console.error('Checkout initialization error:', err);
+                errorMessage.textContent = 'An error occurred during checkout initialization: ' + err.message;
+            } finally {
+                // Re-enable the submit button
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

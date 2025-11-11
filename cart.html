@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart - Layback Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Link to your main styles.css file -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <style>
+    /* Specific styles for the cart page, overriding general styles if needed */
+    .cart-content-wrapper {
+      max-width: 1200px; /* Match your container width */
+      margin: 40px auto; /* Add vertical spacing */
+      padding: 0 15px;
+    }
+
+    .woocommerce-cart-form {
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .shop_table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .shop_table th,
+    .shop_table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .shop_table th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .product-remove,
+    .product-thumbnail {
+      width: 10%; /* Adjust column widths as needed */
+    }
+
+    .product-name {
+      width: 40%;
+    }
+
+    .product-price,
+    .product-quantity,
+    .product-subtotal {
+      width: 15%;
+      text-align: center; /* Center align price, quantity, and subtotal */
+    }
+
+    .product-thumbnail img {
+      max-width: 80px; /* Set thumbnail size */
+      max-height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .quantity input[type="number"] {
+      width: 60px;
+      text-align: center;
+      padding: 5px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    .quantity button {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      background: var(--light-bg);
+      cursor: pointer;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-remove a.remove {
+      color: #dc3545; /* Red color for remove link */
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .cart-actions {
+      display: flex;
+      justify-content: flex-end; /* Align buttons to the right */
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none; /* For anchor buttons */
+      display: inline-block; /* For anchor buttons */
+      text-align: center; /* For anchor buttons */
+    }
+
+    .button:hover {
+      opacity: 0.9;
+    }
+
+    .button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .cart-totals {
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+      max-width: 400px; /* Align totals to the right or center */
+      margin-left: auto; /* Push to the right */
+    }
+
+    .cart-totals table {
+      width: 100%;
+    }
+
+    .cart-totals th,
+    .cart-totals td {
+      padding: 8px 0; /* Less padding for totals table */
+      text-align: right; /* Align text to the right */
+    }
+
+    .cart-totals th {
+      text-align: left; /* Align header to the left */
+      font-weight: 600;
+    }
+
+    .order-total th,
+    .order-total td {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .wc-proceed-to-checkout {
+      margin-top: 20px;
+      text-align: right; /* Align checkout button to the right */
+    }
+
+    .checkout-button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .checkout-button:hover {
+      opacity: 0.9;
+    }
+
+    /* Shipping Calculator Styles */
+    .shipping-calculator-form {
+      margin-top: 15px;
+      padding: 15px;
+      background: var(--light-bg);
+      border-radius: 5px;
+      display: none; /* Hidden by default */
+    }
+
+    .shipping-calculator-form.active {
+      display: block; /* Show when active */
+    }
+
+    .shipping-calculator-form p {
+      margin-bottom: 10px;
+    }
+
+    .shipping-calculator-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .shipping-calculator-form input,
+    .shipping-calculator-form select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+
+    .shipping-calculator-button {
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .woocommerce-shipping-destination {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .shop_table,
+      .shop_table thead,
+      .shop_table tbody,
+      .shop_table th,
+      .shop_table td,
+      .shop_table tr {
+        display: block;
+      }
+
+      .shop_table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      .shop_table tr {
+        border: 1px solid var(--border);
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .shop_table td {
+        border: none;
+        position: relative;
+        padding-left: 50% !important; /* Increase padding for labels */
+        text-align: left;
+      }
+
+      .shop_table td:before {
+        content: attr(data-title) ": "; /* Use data-title for label */
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-weight: 600;
+      }
+
+      .product-thumbnail,
+      .product-remove {
+        text-align: center;
+      }
+
+      .product-thumbnail img {
+        max-width: 100px; /* Larger thumbs on mobile */
+        max-height: 100px;
+      }
+
+      .quantity {
+        justify-content: flex-start;
+      }
+
+      .cart-totals {
+        max-width: 100%; /* Full width on mobile */
+        margin-left: 0;
+      }
+
+      .cart-actions,
+      .wc-proceed-to-checkout {
+        text-align: center; /* Center buttons on mobile */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (Assuming you have a header.html or similar include, or copy from another page) -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <!-- Updated image path -->
+          <img src="./LaybackGarments/public/images/LOGO.png" alt="Layback Logo" />
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="join_our_team.html">Join our team</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="just_arrived.html">Just arrived</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="order_tracking.html">Track Order</a></li>
+            <li><a href="store_location.html">Stores</a></li>
+            <li><a href="gifts_promotions.html">Gifts & Promotions</a></li>
+            <li><a href="admin_page.html">Admin Panel</a></li>
+          </ul>
+        </nav>
+
+        <div class="user-actions">
+          <a href="#" class="login-register" onclick="openModal('loginModal')">
+            <i class="fas fa-user"></i>
+            <span id="auth-status-text">Login / Register</span>
+          </a>
+          <a href="#" class="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+          <a href="#" class="wishlist">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a href="#" class="profile">
+            <i class="fa-solid fa-user-check"></i>
+            <span id="username-display">Profile</span>
+          </a>
+        </div>
+      </div>
+
+      <form class="search-bar" onsubmit="handleSearch(event)">
+        <input type="text" id="search-input" placeholder="Search..." required />
+        <select id="category-select">
+          <option value="">SELECT CATEGORY</option>
+          <option value="clothing">Clothing</option>
+          <option value="shoes">Shoes</option>
+          <option value="accessories">Accessories</option>
+        </select>
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+      
+    </div>
+  </header>
+
+  <!-- Main Cart Content -->
+  <main class="cart-main">
+    <div class="container">
+      <div class="cart-content-wrapper">
+        <h1>Your Cart</h1>
+
+        <!-- WooCommerce Notices (Placeholder if needed) -->
+        <div class="woocommerce-notices-wrapper"></div>
+
+        <!-- Cart Form -->
+        <form class="woocommerce-cart-form" id="cartForm">
+          <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents" cellspacing="0">
+            <thead>
+              <tr>
+                <th class="product-remove"><span class="screen-reader-text">Remove item</span></th>
+                <th class="product-thumbnail"><span class="screen-reader-text">Thumbnail image</span></th>
+                <th class="product-name">Product</th>
+                <th class="product-price">Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class="product-subtotal">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody id="cartItemsBody">
+              <!-- Cart items will be loaded here by JavaScript -->
+              <tr><td colspan="6" style="text-align: center;">Loading cart...</td></tr>
+            </tbody>
+          </table>
+
+          <!-- Cart Actions Row -->
+          <tr class="wd-cart-action-row">
+            <td colspan="6" class="actions">
+              <div class="cart-actions">
+                <button type="submit" class="button" name="update_cart" value="Update cart" id="updateCartButton" disabled>
+                  Update cart
+                </button>
+                <!-- Hidden nonce and referer fields are not needed for client-side localStorage cart -->
+              </div>
+            </td>
+          </tr>
+        </form> <!-- End Cart Form -->
+
+        <!-- Cart Totals Section -->
+        <div class="cart_totals">
+          <div class="cart-totals-inner">
+            <h2>Cart totals</h2>
+            <table cellspacing="0" class="shop_table shop_table_responsive">
+              <tbody>
+                <tr class="cart-subtotal">
+                  <th>Subtotal</th>
+                  <td id="cartSubtotal"><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>0.00</bdi></span></td>
+                </tr>
+                <!-- Shipping Costs -->
+                <tr class="woocommerce-shipping-totals shipping">
+                  <th>Shipping</th>
+                  <td id="cartShippingCost">
+                    <ul id="shipping_method_list">
+                      <!-- Shipping options will be populated by JS -->
+                      <li id="shipping-loading">Calculating...</li>
+                    </ul>
+                    <p class="woocommerce-shipping-destination" id="shippingDestination">
+                      <!-- Destination will be updated by JS -->
+                    </p>
+                  </td>
+                </tr>
+                <tr class="order-total">
+                  <th>Total</th>
+                  <td id="cartTotal"><strong><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>0.00</bdi></span></strong></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Shipping Calculator (Initially Hidden) -->
+            <form class="woocommerce-shipping-calculator" id="shippingCalculatorForm" style="display: none;">
+              <a href="#" class="shipping-calculator-button" id="showHideShippingCalc">Change address</a>
+              <section class="shipping-calculator-form" id="shippingCalculatorFormSection">
+                <p class="form-row form-row-wide" id="calc_shipping_country_field">
+                  <label for="calc_shipping_country">Country / region</label>
+                  <select name="calc_shipping_country" id="calc_shipping_country" class="country_to_state">
+                    <option value="default">Select a country / region…</option>
+                    <option value="ZA" selected>South Africa</option>
+                    <!-- Add other countries if needed -->
+                  </select>
+                </p>
+                <p class="form-row form-row-wide" id="calc_shipping_state_field">
+                  <label for="calc_shipping_state">Province</label>
+                  <select name="calc_shipping_state" id="calc_shipping_state" class="state_select">
+                    <option value="">Select Province…</option>
+                    <option value="GP">Gauteng</option>
+                    <option value="WC">Western Cape</option>
+                    <option value="KZN">KwaZulu-Natal</option>
+                    <!-- Add other provinces -->
+                  </select>
+                </p>
+                <p class="form-row form-row-wide" id="calc_shipping_city_field">
+                  <label for="calc_shipping_city">Town / City</label>
+                  <input type="text" class="input-text" name="calc_shipping_city" id="calc_shipping_city" value="">
+                </p>
+                <p class="form-row form-row-wide" id="calc_shipping_postcode_field">
+                  <label for="calc_shipping_postcode">Postcode / ZIP</label>
+                  <input type="text" class="input-text" name="calc_shipping_postcode" id="calc_shipping_postcode" value="">
+                </p>
+                <p><button type="button" name="calc_shipping" value="1" class="button" id="calculateShippingButton">Update</button></p>
+              </section>
+            </form>
+            <!-- End Shipping Calculator -->
+
+            <div class="wc-proceed-to-checkout">
+              <a href="checkout.html" class="checkout-button button alt wc-forward" id="proceedToCheckoutButton" style="display: none;">Proceed to checkout</a>
+              <p id="emptyCartMessage">Your cart is currently empty.</p>
+            </div>
+          </div>
+        </div> <!-- End Cart Totals -->
+
+      </div> <!-- End Cart Content Wrapper -->
+    </div> <!-- End Container -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="faqs.html">FAQs</a> |
+        <a href="returns.html">Return Policy</a> |
+        <a href="join_our_team.html">Join our team</a>
+      </p>
+      <p><strong>LAYBACK GARMENTS</strong> © 2025</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // --- CART MANAGEMENT LOGIC ---
+
+    // --- CONSTANTS ---
+    const CART_STORAGE_KEY = 'laybackCart'; // Use a consistent key for the cart in localStorage
+    const SHIPPING_COST_PER_ITEM = 75; // Example: R75 per item for shipping
+    const FREE_SHIPPING_THRESHOLD = 1500; // Example: Free shipping over R1500
+    const DEFAULT_SHIPPING_DESTINATION = "Gauteng"; // Default assumption
+
+    // --- DOM ELEMENTS ---
+    const cartItemsBody = document.getElementById('cartItemsBody');
+    const updateCartButton = document.getElementById('updateCartButton');
+    const cartSubtotalEl = document.getElementById('cartSubtotal');
+    const cartShippingCostEl = document.getElementById('cartShippingCost');
+    const shippingMethodList = document.getElementById('shipping_method_list');
+    const shippingDestinationEl = document.getElementById('shippingDestination');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const proceedToCheckoutButton = document.getElementById('proceedToCheckoutButton');
+    const emptyCartMessage = document.getElementById('emptyCartMessage');
+    const showHideShippingCalcLink = document.getElementById('showHideShippingCalc');
+    const shippingCalculatorFormSection = document.getElementById('shippingCalculatorFormSection');
+    const calculateShippingButton = document.getElementById('calculateShippingButton');
+    const cartForm = document.getElementById('cartForm'); // Form containing the cart items
+
+    // --- FUNCTIONS ---
+
+    /**
+     * Loads the cart from localStorage.
+     * @returns {Array} The cart array or an empty array if none exists.
+     */
+    function loadCart() {
+        const cartJSON = localStorage.getItem(CART_STORAGE_KEY);
+        return cartJSON ? JSON.parse(cartJSON) : [];
+    }
+
+    /**
+     * Saves the cart to localStorage.
+     * @param {Array} cart - The cart array to save.
+     */
+    function saveCart(cart) {
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        console.log("Cart saved to localStorage:", cart);
+    }
+
+    /**
+     * Calculates the subtotal of the cart.
+     * @param {Array} cart - The cart array.
+     * @returns {number} The subtotal amount.
+     */
+    function calculateSubtotal(cart) {
+        return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    }
+
+    /**
+     * Calculates the shipping cost based on the cart.
+     * @param {Array} cart - The cart array.
+     * @param {string} destination - Optional destination string for advanced logic.
+     * @returns {number} The shipping cost.
+     */
+    function calculateShipping(cart, destination = DEFAULT_SHIPPING_DESTINATION) {
+        const subtotal = calculateSubtotal(cart);
+        // Example logic: R75 per item, free over R1500
+        if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+            return 0;
+        }
+        // Simple cost per item calculation
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        return totalItems * SHIPPING_COST_PER_ITEM;
+    }
+
+    /**
+     * Calculates the total of the cart (subtotal + shipping).
+     * @param {Array} cart - The cart array.
+     * @param {string} destination - Optional destination string for shipping calculation.
+     * @returns {number} The total amount.
+     */
+    function calculateTotal(cart, destination = DEFAULT_SHIPPING_DESTINATION) {
+        const subtotal = calculateSubtotal(cart);
+        const shipping = calculateShipping(cart, destination);
+        return subtotal + shipping;
+    }
+
+    /**
+     * Renders the cart items in the table body.
+     * @param {Array} cart - The cart array.
+     */
+    function renderCart(cart) {
+        if (cart.length === 0) {
+            cartItemsBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Your cart is empty.</td></tr>`;
+            emptyCartMessage.style.display = 'block';
+            proceedToCheckoutButton.style.display = 'none';
+            updateCartButton.disabled = true; // Disable update button if cart is empty
+            return;
+        }
+
+        emptyCartMessage.style.display = 'none';
+        proceedToCheckoutButton.style.display = 'inline-block';
+        updateCartButton.disabled = false; // Enable update button if cart has items
+
+        let cartHTML = '';
+        cart.forEach((item, index) => { // Use index for unique identifiers in the UI
+            const itemTotal = (item.price * item.quantity).toFixed(2);
+            cartHTML += `
+                <tr class="woocommerce-cart-form__cart-item cart_item">
+                    <td class="product-remove">
+                        <a href="#" class="remove" aria-label="Remove ${item.name} from cart" data-item-index="${index}">×</a>
+                    </td>
+                    <td class="product-thumbnail">
+                        <a href="#">
+                            <img src="${item.image || './LaybackGarments/public/images/default-product.jpg'}" alt="${item.name}" /> <!-- Use item image or default -->
+                        </a>
+                    </td>
+                    <td class="product-name" data-title="Product">
+                        <a href="#">${item.name}</a>
+                        ${item.variation ? `<ul class="variation"><li class="variation-${item.variation.name.replace(/\s+/g, '')}"><span class="item-variation-name">${item.variation.name}:</span> <span class="item-variation-value">${item.variation.value}</span></li></ul>` : ''}
+                    </td>
+                    <td class="product-price" data-title="Price">
+                        <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>${item.price.toFixed(2)}</bdi></span>
+                    </td>
+                    <td class="product-quantity" data-title="Quantity">
+                        <div class="quantity">
+                            <button type="button" class="minus btn" data-item-index="${index}">-</button>
+                            <input type="number" class="input-text qty text" value="${item.quantity}" aria-label="Product quantity" min="0" data-item-index="${index}">
+                            <button type="button" class="plus btn" data-item-index="${index}">+</button>
+                        </div>
+                    </td>
+                    <td class="product-subtotal" data-title="Subtotal">
+                        <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>${itemTotal}</bdi></span>
+                    </td>
+                </tr>
+            `;
+        });
+        cartItemsBody.innerHTML = cartHTML;
+
+        // Attach event listeners to the newly created buttons and inputs
+        attachEventListeners();
+    }
+
+    /**
+     * Updates the cart totals display.
+     * @param {Array} cart - The cart array.
+     * @param {string} destination - The current shipping destination.
+     */
+    function updateTotals(cart, destination = DEFAULT_SHIPPING_DESTINATION) {
+        const subtotal = calculateSubtotal(cart);
+        const shippingCost = calculateShipping(cart, destination);
+        const total = calculateTotal(cart, destination);
+
+        cartSubtotalEl.innerHTML = `<span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>${subtotal.toFixed(2)}</bdi></span>`;
+        // Update shipping methods list (example with flat rate and free shipping)
+        shippingMethodList.innerHTML = `
+            <li>
+                <input type="radio" name="shipping_method[0]" data-index="0" id="shipping_method_0_flat_rate1" value="flat_rate:1" class="shipping_method" ${shippingCost > 0 ? 'checked="checked"' : ''}>
+                <label for="shipping_method_0_flat_rate1">Delivery: <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>${shippingCost.toFixed(2)}</bdi></span></label>
+            </li>
+            ${subtotal >= FREE_SHIPPING_THRESHOLD ?
+            `<li>
+                <input type="radio" name="shipping_method[0]" data-index="0" id="shipping_method_0_free_shipping4" value="free_shipping:4" class="shipping_method" checked="checked">
+                <label for="shipping_method_0_free_shipping4">You qualify for Free Delivery</label>
+            </li>` : ''}
+        `;
+        // Update destination display
+        shippingDestinationEl.textContent = `Shipping to <strong>${destination}</strong>.`;
+        cartTotalEl.innerHTML = `<strong><span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">R</span>${total.toFixed(2)}</bdi></span></strong>`;
+    }
+
+    /**
+     * Attaches event listeners to dynamically added elements (quantity buttons, remove links).
+     */
+    function attachEventListeners() {
+        // Quantity minus button
+        document.querySelectorAll('.quantity .minus.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemIndex = parseInt(this.getAttribute('data-item-index'));
+                updateQuantity(itemIndex, -1);
+            });
+        });
+
+        // Quantity plus button
+        document.querySelectorAll('.quantity .plus.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemIndex = parseInt(this.getAttribute('data-item-index'));
+                updateQuantity(itemIndex, 1);
+            });
+        });
+
+        // Quantity input change
+        document.querySelectorAll('.quantity input[type="number"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const itemIndex = parseInt(this.getAttribute('data-item-index'));
+                const newQuantity = parseInt(this.value);
+                if (!isNaN(newQuantity) && newQuantity >= 0) {
+                    updateQuantityDirect(itemIndex, newQuantity);
+                } else {
+                    // Reset to previous value if invalid
+                    const cart = loadCart();
+                    if (cart[itemIndex]) {
+                        this.value = cart[itemIndex].quantity;
+                    }
+                }
+            });
+        });
+
+        // Remove item link
+        document.querySelectorAll('.product-remove .remove').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); // Prevent default link behavior
+                const itemIndex = parseInt(this.getAttribute('data-item-index'));
+                removeFromCart(itemIndex);
+            });
+        });
+    }
+
+    /**
+     * Updates the quantity of an item in the cart.
+     * @param {number} itemIndex - The index of the item in the cart array.
+     * @param {number} change - The change in quantity (+1 for plus, -1 for minus).
+     */
+    function updateQuantity(itemIndex, change) {
+        const cart = loadCart();
+        if (cart[itemIndex]) {
+            const newQty = cart[itemIndex].quantity + change;
+            if (newQty > 0) {
+                cart[itemIndex].quantity = newQty;
+            } else if (newQty <= 0) {
+                // If quantity goes to 0 or below, remove the item
+                cart.splice(itemIndex, 1);
+            }
+            saveCart(cart);
+            renderCart(cart);
+            updateTotals(cart); // Update totals after modification
+        }
+    }
+
+    /**
+     * Updates the quantity of an item in the cart directly.
+     * @param {number} itemIndex - The index of the item in the cart array.
+     * @param {number} newQuantity - The new quantity.
+     */
+    function updateQuantityDirect(itemIndex, newQuantity) {
+        const cart = loadCart();
+        if (cart[itemIndex]) {
+            if (newQuantity > 0) {
+                cart[itemIndex].quantity = newQuantity;
+            } else {
+                // If quantity is set to 0, remove the item
+                cart.splice(itemIndex, 1);
+            }
+            saveCart(cart);
+            renderCart(cart);
+            updateTotals(cart); // Update totals after modification
+        }
+    }
+
+    /**
+     * Removes an item from the cart.
+     * @param {number} itemIndex - The index of the item in the cart array.
+     */
+    function removeFromCart(itemIndex) {
+        const cart = loadCart();
+        if (itemIndex >= 0 && itemIndex < cart.length) {
+            cart.splice(itemIndex, 1); // Remove item at index
+            saveCart(cart);
+            renderCart(cart);
+            updateTotals(cart); // Update totals after removal
+        }
+    }
+
+    /**
+     * Handles updating the cart based on form changes (currently just updates totals if needed).
+     * Disables the button after click to prevent double submission during async save.
+     */
+    cartForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission (page reload)
+        console.log("Cart update button clicked.");
+        // In this localStorage-based cart, the "Update cart" button mainly recalculates totals
+        // if the shipping address changed (handled separately below).
+        // For quantity changes, the +/- buttons or input blur already trigger saves and updates.
+        // We could add logic here if other fields were modifiable via the form, but they are not in this example.
+        // Just re-render and update totals based on the current state of localStorage.
+        const currentCart = loadCart();
+        renderCart(currentCart);
+        updateTotals(currentCart); // Recalculate totals in case something external changed the cart
+        // Disable button briefly to indicate processing
+        updateCartButton.disabled = true;
+        setTimeout(() => {
+             updateCartButton.disabled = false;
+        }, 300); // Re-enable after a short delay
+    });
+
+    // --- SHIPPING CALCULATOR LOGIC ---
+    showHideShippingCalcLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        shippingCalculatorFormSection.classList.toggle('active');
+        // Update link text based on visibility
+        showHideShippingCalcLink.textContent = shippingCalculatorFormSection.classList.contains('active') ? 'Hide address' : 'Change address';
+    });
+
+    calculateShippingButton.addEventListener('click', function() {
+        const country = document.getElementById('calc_shipping_country').value;
+        const state = document.getElementById('calc_shipping_state').value;
+        const city = document.getElementById('calc_shipping_city').value;
+        const postcode = document.getElementById('calc_shipping_postcode').value;
+
+        // Example: Construct a simple destination string for display and calculation
+        // In a real app, you'd likely send this to a backend service for precise calculation
+        const destination = state || country || "Selected Location";
+
+        const currentCart = loadCart();
+        updateTotals(currentCart, destination); // Update totals based on new destination
+
+        // Hide the calculator after calculating (optional)
+        shippingCalculatorFormSection.classList.remove('active');
+        showHideShippingCalcLink.textContent = 'Change address';
+    });
+    // --- END SHIPPING CALCULATOR LOGIC ---
+
+    // --- INITIAL LOAD ---
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Cart page loaded, initializing...");
+        const initialCart = loadCart();
+        console.log("Initial cart from localStorage:", initialCart);
+        renderCart(initialCart);
+        updateTotals(initialCart); // Initial totals calculation
+    });
+    // --- END INITIAL LOAD ---
+
+  </script>
+</body>
+</html>

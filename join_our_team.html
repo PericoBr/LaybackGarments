@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Careers - Layback Garments</title>
+
+  <!-- ✅ Google Fonts (CLEANED) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ✅ Font Awesome (CLEANED) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 12px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo img {
+      max-height: 60px;
+      max-width: 250px;
+      object-fit: contain;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    nav a.active { color: var(--primary); }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 35px;
+      font-size: 13px;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* =============== MAIN CONTENT =============== */
+    main {
+      padding: 60px 0 40px;
+    }
+    .page-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .page-header h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .page-header p {
+      color: #666;
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Job Listings */
+    .job-listings {
+      display: grid;
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .job-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      padding: 30px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .job-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .job-card h3 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: var(--primary);
+    }
+    .job-meta {
+      background: var(--light-bg);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .job-card p {
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .apply-btn {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 10px 24px;
+      border-radius: 35px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(11, 102, 35, 0.2);
+    }
+    .apply-btn:hover {
+      background: #09551d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(11, 102, 35, 0.3);
+    }
+
+    /* Footer & Marquee */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    .payment-marquee {
+      background: #f8f9fa;
+      padding: 12px 0;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+    }
+    .marquee-inner {
+      display: flex;
+      animation: scroll 20s linear infinite;
+      width: max-content;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; }
+      .job-card-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <img src="./images/LOGO.png" alt="Layback Logo" onerror="this.src='https://via.placeholder.com/250x60/0b6623/FFFFFF?text=LOGO'">
+        </div>
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="join_our_team.html" class="active">Careers</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="about.html">About</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <a href="#" class="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+        </div>
+      </div>
+      <form class="search-bar" onsubmit="alert('Search coming soon!'); return false;">
+        <input type="text" placeholder="Search..." required />
+        <select>
+          <option value="">SELECT CATEGORY</option>
+          <option value="clothing">Clothing</option>
+        </select>
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <div class="page-header">
+        <h1>Shape the Future of African Fashion</h1>
+        <p>Join Layback Garments — where creativity, culture, and community come together.</p>
+      </div>
+
+      <div class="job-listings">
+        <!-- Job 1 -->
+        <article class="job-card">
+          <div class="job-card-header">
+            <h3>Brand Strategist</h3>
+            <span class="job-meta"><i class="fas fa-map-marker-alt"></i> Johannesburg, SA (Hybrid)</span>
+          </div>
+          <p>Lead our brand vision, strategy, and market positioning as we scale across Africa.</p>
+          <a href="hiring.html#brand-strategist" class="apply-btn">
+            <i class="fas fa-arrow-right"></i> Apply Now
+          </a>
+        </article>
+
+        <!-- Job 2 -->
+        <article class="job-card">
+          <div class="job-card-header">
+            <h3>Virtual Assistant</h3>
+            <span class="job-meta"><i class="fas fa-laptop"></i> Remote (South Africa)</span>
+          </div>
+          <p>Support our operations, customer service, and admin tasks with precision and care.</p>
+          <a href="hiring.html#virtual-assistant" class="apply-btn">
+            <i class="fas fa-arrow-right"></i> Apply Now
+          </a>
+        </article>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>© 2025 Layback Garments. All rights reserved.</p>
+      <div class="payment-marquee">
+        <div class="marquee-inner">
+          <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" alt="EFT" width="30" height="30">
+          <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" alt="Visa" width="30" height="30">
+          <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" alt="Mastercard" width="30" height="30">
+          <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" alt="Mobicred" width="30" height="30">
+          <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" alt="Visa Electron" width="30" height="30">
+          <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" alt="Payflex" width="150" height="30">
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

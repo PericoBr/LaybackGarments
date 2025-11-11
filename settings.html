@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - Admin Panel - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com    " />
+  <link rel="preconnect" href="https://fonts.gstatic.com    " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="    https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css    " />
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER (Top Bar) =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN SETTINGS =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .settings-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .settings-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .settings-tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .settings-tab.active {
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .settings-section {
+      display: none;
+      background: var(--white);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .settings-section.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-size: 1rem;
+    }
+    .form-group input[type="checkbox"] {
+      width: auto;
+    }
+    .form-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    /* Specific styles for payment settings */
+    .payment-provider-config {
+        padding: 15px;
+        background-color: var(--light-bg);
+        border-radius: var(--radius);
+        margin-top: 10px;
+        display: none; /* Initially hidden */
+    }
+    .payment-provider-config.active {
+        display: block; /* Show when provider is selected */
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header { left: 0; }
+      footer { left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Check for admin token on page load -->
+  <script>
+    window.onload = function() {
+        const token = localStorage.getItem('adminToken');
+        if (!token) {
+            // Redirect to login if no token found
+            window.location.href = 'admin_login.html';
+        } else {
+            // Optional: Verify token is still valid by making a simple request
+            // For now, just ensure the token is present.
+            // You might want to call a 'verify' endpoint later.
+        }
+    };
+  </script>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html" class="active"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+      <img src="C:\Users\Lebo\Documents\lbg\IMAGES FOR LBG\LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+      <img src="https://via.placeholder.com/30    " alt="Admin Avatar">
+      <span>Admin User</span>
+    </div>
+  </header>
+
+  <!-- Main Settings Content -->
+  <main>
+    <div class="container">
+      <div class="settings-header">
+        <h1>System Settings</h1>
+      </div>
+
+      <!-- Settings Tabs -->
+      <div class="settings-tabs">
+        <div class="settings-tab active" onclick="openTab('general')">General</div>
+        <div class="settings-tab" onclick="openTab('payment')">Payment</div>
+        <div class="settings-tab" onclick="openTab('shipping')">Shipping</div>
+        <div class="settings-tab" onclick="openTab('notifications')">Notifications</div>
+        <div class="settings-tab" onclick="openTab('users')">Users</div>
+      </div>
+
+      <!-- General Settings Section -->
+      <div class="settings-section active" id="general">
+        <h3>General Settings</h3>
+        <form id="generalForm">
+          <div class="form-group">
+            <label for="storeName">Store Name:</label>
+            <input type="text" id="storeName" value="LayBack Garments">
+          </div>
+          <div class="form-group">
+            <label for="storeEmail">Admin Email:</label>
+            <input type="email" id="storeEmail" value="admin@laybackgarments.com">
+          </div>
+          <div class="form-group">
+            <label for="storeCurrency">Currency:</label>
+            <select id="storeCurrency">
+              <option value="ZAR">ZAR (R)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="maintenanceMode"> Maintenance Mode</label>
+          </div>
+          <div class="form-actions">
+            <button type="submit">Save Changes</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Payment Settings Section -->
+      <div class="settings-section" id="payment">
+        <h3>Payment Settings</h3>
+        <form id="paymentForm">
+          <div class="form-group">
+            <label><input type="checkbox" id="enableCard" onchange="togglePaymentConfig()"> Enable Credit Card</label>
+          </div>
+          <div class="form-group">
+            <label for="cardProvider">Card Provider:</label>
+            <select id="cardProvider" onchange="showPaymentConfig()">
+              <option value="">Select Provider</option>
+              <option value="stripe">Stripe</option>
+              <option value="paypal">PayPal</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- Stripe Configuration (Hidden by default) -->
+          <div id="stripeConfig" class="payment-provider-config">
+            <h4>Stripe Configuration</h4>
+            <div class="form-group">
+                <label for="stripePublishableKey">Publishable Key (Frontend):</label>
+                <input type="text" id="stripePublishableKey" placeholder="pk_test_... or pk_live_..."> <!-- Example format -->
+            </div>
+            <!-- IMPORTANT: The Secret Key should NEVER be stored or handled in frontend code -->
+            <!-- This is just a placeholder for understanding. It would be set on the backend. -->
+            <div class="form-group">
+                <label>Secret Key (Backend Only):</label>
+                <input type="password" id="stripeSecretKey" placeholder="sk_test_... or sk_live_..." disabled> <!-- Disabled for security -->
+                <p style="font-size: 0.8em; color: #666;">This key is configured on the server and never exposed here.</p>
+            </div>
+            <div class="form-group">
+                <label for="stripeWebhookEndpoint">Webhook Endpoint:</label>
+                <input type="text" id="stripeWebhookEndpoint" value="http://localhost:3000/webhook/stripe" disabled> <!-- Example, would be set on backend -->
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="stripeSandbox"> Use Test Mode</label>
+            </div>
+          </div>
+
+          <!-- PayPal Configuration (Hidden by default) -->
+          <div id="paypalConfig" class="payment-provider-config">
+            <h4>PayPal Configuration</h4>
+            <div class="form-group">
+                <label for="paypalClientId">Client ID (Frontend):</label>
+                <input type="text" id="paypalClientId" placeholder="A long string...">
+            </div>
+            <!-- IMPORTANT: The Secret should NEVER be stored or handled in frontend code -->
+            <div class="form-group">
+                <label>Secret (Backend Only):</label>
+                <input type="password" id="paypalSecret" placeholder="A long string..." disabled>
+                <p style="font-size: 0.8em; color: #666;">This secret is configured on the server and never exposed here.</p>
+            </div>
+            <div class="form-group">
+                <label for="paypalWebhookEndpoint">Webhook Endpoint:</label>
+                <input type="text" id="paypalWebhookEndpoint" value="http://localhost:3000/webhook/paypal" disabled>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" id="paypalSandbox"> Use Sandbox</label>
+            </div>
+          </div>
+
+          <!-- EFT Configuration -->
+          <div class="form-group">
+            <label><input type="checkbox" id="enableEFT" onchange="toggleEFTConfig()"> Enable EFT</label>
+          </div>
+          <div id="eftDetailsContainer" style="display: none;"> <!-- Hidden by default -->
+              <div class="form-group">
+                <label for="eftDetails">EFT Details:</label>
+                <textarea id="eftDetails" rows="3">Bank: ABC Bank
+Account Number: 123456789
+Branch Code: 123456</textarea>
+              </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">Save Payment Settings</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Shipping Settings Section -->
+      <div class="settings-section" id="shipping">
+        <h3>Shipping Settings</h3>
+        <form id="shippingForm">
+          <div class="form-group">
+            <label for="defaultShipping">Default Shipping Method:</label>
+            <select id="defaultShipping">
+              <option value="standard">Standard</option>
+              <option value="express">Express</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="standardRate">Standard Rate:</label>
+            <input type="number" id="standardRate" step="0.01" value="100.00">
+          </div>
+          <div class="form-group">
+            <label for="expressRate">Express Rate:</label>
+            <input type="number" id="expressRate" step="0.01" value="200.00">
+          </div>
+          <div class="form-actions">
+            <button type="submit">Save Shipping Settings</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Notifications Settings Section -->
+      <div class="settings-section" id="notifications">
+        <h3>Notification Settings</h3>
+        <form id="notificationsForm">
+          <div class="form-group">
+            <label><input type="checkbox" id="emailNewOrder" checked> Email on New Order</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="emailShipped" checked> Email on Shipped</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="emailDelivered"> Email on Delivered</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="smsNewOrder"> SMS on New Order</label>
+          </div>
+          <div class="form-actions">
+            <button type="submit">Save Notification Settings</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Users Settings Section -->
+      <div class="settings-section" id="users">
+        <h3>User Management Settings</h3>
+        <form id="usersForm">
+          <div class="form-group">
+            <label><input type="checkbox" id="requireApproval"> Require Approval for New Users</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="allowRegistrations" checked> Allow User Registrations</label>
+          </div>
+          <div class="form-actions">
+            <button type="submit">Save User Settings</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2023 LAYBACKGARMENTS. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    function openTab(tabName) {
+        // Hide all sections
+        const sections = document.querySelectorAll('.settings-section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Remove active class from all tabs
+        const tabs = document.querySelectorAll('.settings-tab');
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Show the selected section and activate the clicked tab
+        document.getElementById(tabName).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Function to show/hide EFT details based on checkbox
+    function toggleEFTConfig() {
+        const eftCheckbox = document.getElementById('enableEFT');
+        const eftContainer = document.getElementById('eftDetailsContainer');
+        eftContainer.style.display = eftCheckbox.checked ? 'block' : 'none';
+    }
+
+    // Function to show/hide payment provider configs based on selection
+    function showPaymentConfig() {
+        const providerSelect = document.getElementById('cardProvider');
+        const selectedProvider = providerSelect.value;
+
+        // Hide all config sections
+        document.querySelectorAll('.payment-provider-config').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show the selected one (if applicable)
+        if (selectedProvider) {
+            const configId = `${selectedProvider}Config`;
+            const configElement = document.getElementById(configId);
+            if (configElement) {
+                configElement.classList.add('active');
+            }
+        }
+    }
+
+    // Function to toggle visibility of the provider selection/config section
+    function togglePaymentConfig() {
+        const enableCardCheckbox = document.getElementById('enableCard');
+        const providerSelect = document.getElementById('cardProvider');
+        const stripeConfig = document.getElementById('stripeConfig');
+        const paypalConfig = document.getElementById('paypalConfig');
+        const otherConfig = document.getElementById('otherConfig'); // Assuming you add an 'other' config div
+
+        if (enableCardCheckbox.checked) {
+            providerSelect.disabled = false;
+            // Show config for currently selected provider
+            showPaymentConfig();
+        } else {
+            providerSelect.disabled = true;
+            // Hide all provider configs
+            stripeConfig.classList.remove('active');
+            paypalConfig.classList.remove('active');
+            // Hide other config if it exists
+            // otherConfig.classList.remove('active');
+        }
+    }
+
+    // Initialize EFT config visibility on page load
+    document.getElementById('enableEFT').addEventListener('change', toggleEFTConfig);
+    toggleEFTConfig(); // Call once to set initial state
+
+    // Initialize Payment config visibility on page load
+    document.getElementById('cardProvider').addEventListener('change', showPaymentConfig);
+    document.getElementById('enableCard').addEventListener('change', togglePaymentConfig);
+    togglePaymentConfig(); // Call once to set initial state
+
+
+    // --- Example: Handling form submission for payment settings ---
+    document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevent default form submission
+
+        const enableCard = document.getElementById('enableCard').checked;
+        const cardProvider = document.getElementById('cardProvider').value;
+
+        if (enableCard && cardProvider) {
+            // Example: Collect only the configuration *name* or *ID* for the provider
+            // The actual API keys are handled on the backend.
+            const config = {
+                enabled: enableCard,
+                provider: cardProvider,
+                // Example: Collect other non-sensitive config options
+                sandbox: document.getElementById(`${cardProvider}Sandbox`).checked,
+                // Example: Collect publishable key (if applicable and safe to store/configure this way)
+                // publishableKey: document.getElementById(`${cardProvider}PublishableKey`).value
+            };
+
+            console.log("Saving Payment Config:", config);
+
+            // --- SEND CONFIG TO BACKEND ---
+            // In a real application, you would send this config object to your backend
+            // using fetch or another method. The backend would then securely store the
+            // provider name and any non-sensitive options, and use the stored secrets
+            // to interact with the payment processor.
+            fetch('http://localhost:3000/api/settings/payment', { // Example endpoint
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include authentication token here if implemented
+                    // 'Authorization': `Bearer ${getAuthToken()}`
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Payment settings saved successfully:", data);
+                alert("Payment settings saved successfully!");
+            })
+            .catch(error => {
+                console.error("Error saving payment settings:", error);
+                alert("Failed to save payment settings. Please check the console.");
+            });
+
+        } else if (!enableCard) {
+            // Handle case where card payments are disabled
+            const config = { enabled: false, provider: null };
+            console.log("Saving Payment Config (Disabled):", config);
+            // Send config to backend to disable payments
+             fetch('http://localhost:3000/api/settings/payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Include authentication token here if implemented
+                    // 'Authorization': `Bearer ${getAuthToken()}`
+                },
+                body: JSON.stringify(config)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Payment settings (disabled) saved successfully:", data);
+                alert("Payment settings saved successfully!");
+            })
+            .catch(error => {
+                console.error("Error saving payment settings:", error);
+                alert("Failed to save payment settings. Please check the console.");
+            });
+        } else {
+            alert("Please select a card provider if enabling card payments.");
+        }
+    });
+
+    // --- Example: Handling other form submissions ---
+    document.querySelectorAll('form').forEach(form => {
+        if (form.id !== 'paymentForm') { // Skip the payment form as it has its own handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Settings saved!');
+                // In a real app, collect form data and send request to save settings
+                console.log(`Saving settings from form: ${form.id}`);
+            });
+        }
+    });
+
+  </script>
+</body>
+</html>

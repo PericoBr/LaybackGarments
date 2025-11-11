@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQs - Layback Garments</title>
+
+  <!--  Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!--  Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623; /* Green */
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: var(--light-bg);
+    }
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 0;
+    }
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo img {
+      max-height: 60px;
+      max-width: 250px;
+      object-fit: contain;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 18px;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .user-actions a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .user-actions i {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+    .search-bar {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .search-bar input,
+    .search-bar select,
+    .search-bar button {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 35px;
+      font-size: 13px;
+    }
+    .search-bar button {
+      background: var(--primary);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* =============== MAIN FAQS =============== */
+    main {
+      padding: 40px 0;
+    }
+    .faqs-container {
+        background: var(--white);
+        padding: 30px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+    }
+    .faqs-container h1 {
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+
+    /* --- Accordion Styling --- */
+    .wd-accordion {
+        width: 100%;
+    }
+
+    .wd-accordion-item {
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 10px;
+    }
+
+    .wd-accordion-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+        transition: background-color 0.2s ease;
+    }
+
+    .wd-accordion-title:hover {
+        background-color: #f5f5f5;
+    }
+
+    .wd-accordion-title-text {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-grow: 1;
+    }
+
+    .wd-accordion-title-text .img-wrapper {
+        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .wd-accordion-title-text .img-wrapper i {
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    .wd-accordion-opener {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--primary);
+        transition: transform 0.3s ease;
+    }
+
+    .wd-accordion-opener::before {
+        content: "\f107";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 1rem;
+    }
+
+    .wd-accordion-title.wd-active .wd-accordion-opener {
+        transform: rotate(180deg);
+    }
+
+    .wd-accordion-content {
+        padding: 0 0 15px 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        color: #666;
+    }
+
+    .wd-accordion-content.wd-active {
+        max-height: 500px;
+        padding: 10px 0 15px 0;
+    }
+
+    .wd-accordion-content p {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: none;
+    }
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 768px) {
+      .header-content { flex-direction: column; text-align: center; }
+      nav ul { justify-content: center; flex-wrap: wrap; }
+      .search-bar { justify-content: center; }
+      .faqs-container { padding: 20px 15px; }
+      .faqs-container h1 { font-size: 1.8rem; }
+    }
+    @media (max-width: 480px) {
+      nav ul { gap: 10px; font-size: 12px; }
+      .user-actions { gap: 12px; }
+      .user-actions span { font-size: 11px; }
+    }
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.payment-marquee:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+           
+           <img src="./LaybackGarments/public/images/LOGO.png" alt="Layback Logo">
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="shop.html">Shop</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+            <li><a href="just_arrived.html">Just arrived</a></li>
+            <li><a href="faqs.html" class="active">FAQs</a></li>
+            <li><a href="returns.html">Returns</a></li>
+            <li><a href="order_tracking.html">Track Order</a></li>
+            <li><a href="store_location.html">Stores</a></li>
+            <li><a href="gifts_promotions.html">Gifts & Promotions</a></li>
+            <li><a href="admin_page.html">Admin Panel</a></li>
+          </ul>
+        </nav>
+
+        <div class="user-actions">
+          <a href="#" class="login-register" onclick="openModal('loginModal')">
+            <i class="fas fa-user"></i>
+            <span id="auth-status-text">Login / Register</span>
+          </a>
+          <a href="#" class="wishlist">
+            <i class="fas fa-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a href="#" class="cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+          <a href="#" class="profile">
+            <i class="fa-solid fa-user-check"></i>
+            <span id="username-display">Profile</span>
+          </a>
+        </div>
+      </div>
+
+      <form class="search-bar" onsubmit="handleSearch(event)">
+        <input type="text" id="search-input" placeholder="Search for products..." required />
+        <select id="category-select">
+          <option value="">SELECT CATEGORY</option>
+          <option value="accessories">ACCESSORIES</option>
+          <option value="layback-garments">LAYBACK GARMENTS</option>
+          <option value="tops-t-shirts">TOPS/T SHIRTS</option>
+          <option value="layback-bottoms">LAYBACK BOTTOMS</option>
+          <option value="tracksuits">TRACKSUITS</option>
+          <option value="layback-headwear">LAYBACK HEADWEAR</option>
+        </select>
+        <button type="submit"><i class="fas fa-search"></i></button>
+      </form>
+    </div>
+  </header>
+
+  <!-- Main FAQs Content -->
+  <main>
+    <div class="container">
+      <div class="faqs-container">
+        <h1>Frequently Asked Questions</h1>
+
+        <!-- Accordion Container -->
+        <div class="wd-accordion">
+          <!-- Accordion Item 1 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-map-marker-alt"></i></span>
+                <span>WHERE IS YOUR SHOP?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– OUR WAREHOUSE LOCATION: 173 BOSSMAN STREET (303 SEDIBA HOUSE),<br>PRETORIA CBD</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-dolly"></i></span>
+                <span>HOW SOON CAN I GET MY ORDER?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– IT TAKES 3-7 WORKING DAYS (DEPENDING ON THE PIECES ORDERED AND YOUR DELIVERY ADDRESS.)</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span>CAN I BE YOUR AMBASSADOR?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– WE WILL IN THE APPROPRIATE TIME ANNOUNCE THE POSITION IF EVER IT BECOMES OPEN FOR APPLICANTS</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 4 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-certificate"></i></span>
+                <span>PROMOTE/ADVERTISE YOUR BRAND?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– YES PLEASE, WE'D REALLY APPRECIATE YOUR CONTRIBUTION.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 5 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-tshirt"></i></span>
+                <span>CAN YOU PRINT MY NAME/LOGO ON YOUR DESIGNS?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– NO. WE DO NOT MAKE ANY OF THOSE KIND OF REQUESTS.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 6 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-info"></i></span>
+                <span>WHERE DO YOU BUY YOUR STOCK?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>OUR GARMENTS ARE PROUDLY DESIGNED AND MANUFACTURED BY US (LAYBACK GARMENTS) LOCALLY.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 7 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-truck"></i></span>
+                <span>HOW MUCH IS YOUR DELIVERY FEE?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>– DELIVERY FEE IS AT R150 NATIONWIDE.</p>
+              <p>Shipping costs are calculated at checkout based on your delivery address and the weight/size of your order. Free shipping may be available for orders over a certain amount, as indicated during checkout.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 8 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-shield-alt"></i></span>
+                <span>HOW DO I KNOW MY PAYMENT INFORMATION IS SECURE?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>We use industry-standard security measures to protect your payment information. Our website employs secure socket layer (SSL) technology to encrypt your personal and financial data during transmission.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 9 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-credit-card"></i></span>
+                <span>WHAT PAYMENT METHODS DO YOU ACCEPT?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>We accept major credit cards (Visa, Mastercard, American Express) and other payment methods as displayed during checkout, which may include options like EFT or digital wallets depending on our current setup.</p>
+            </div>
+          </div>
+
+          <!-- Accordion Item 10 -->
+          <div class="wd-accordion-item">
+            <div class="wd-accordion-title" onclick="toggleAccordion(this)">
+              <div class="wd-accordion-title-text">
+                <span class="img-wrapper"><i class="fas fa-globe"></i></span>
+                <span>DO YOU SHIP INTERNATIONALLY?</span>
+              </div>
+              <span class="wd-accordion-opener"></span>
+            </div>
+            <div class="wd-accordion-content">
+              <p>Yes, we ship to select international destinations. Shipping costs and delivery times will vary depending on the destination country. Please check the shipping options during checkout for availability and details.</p>
+            </div>
+          </div>
+        </div> <!-- End Accordion Container -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>
+        <a href="faqs.html">FAQs</a> | 
+        <a href="returns.html">Return Policy</a> | 
+        <a href="join_our_team.html">Join our team</a>
+      </p>
+      <p><strong>LAYBACK GARMENTS</strong> © 2025</p>
+    </div>
+    <!-- Payment Methods Marquee -->
+<div class="payment-marquee" style="
+  background: #f8f9fa;
+  padding: 12px 0;
+  overflow: hidden;
+">
+  <div class="marquee-inner" style="
+    display: flex;
+    animation: scroll 20s linear infinite;
+    width: max-content;
+  ">
+    <!-- Icons repeated twice for seamless loop -->
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+    <div style="display: flex; align-items: center; gap: 24px; padding: 0 32px;">
+      <img src="https://laybackgarments.com/storage/2024/11/EFT-30x30.png" 
+           alt="EFT" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-30x30.png" 
+           alt="Visa" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mastercard-30x30.png" 
+           alt="Mastercard" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Mobicred-30x30.png" 
+           alt="Mobicred" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Visa-Electron-30x30.png" 
+           alt="Visa Electron" width="30" height="30" loading="eager">
+      <img src="https://laybackgarments.com/storage/2024/11/Payflex-150x30.jpeg" 
+           alt="Payflex" width="150" height="30" loading="eager" style="height: 30px; width: auto;">
+    </div>
+  </div>
+</div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    //  Accordion logic with optional single-open behavior
+    function toggleAccordion(element) {
+        const item = element.parentElement;
+        const content = item.querySelector('.wd-accordion-content');
+        const title = item.querySelector('.wd-accordion-title');
+
+        const isOpen = content.classList.contains('wd-active');
+
+        // Close all items first (for single-open accordion)
+        document.querySelectorAll('.wd-accordion-item').forEach(i => {
+            i.querySelector('.wd-accordion-content').classList.remove('wd-active');
+            i.querySelector('.wd-accordion-title').classList.remove('wd-active');
+        });
+
+        // If it wasn't open, toggle this one open
+        if (!isOpen) {
+            content.classList.add('wd-active');
+            title.classList.add('wd-active');
+        }
+    }
+
+    //  Search form
+    function handleSearch(event) {
+        event.preventDefault();
+        const query = document.getElementById('search-input').value.trim();
+        const category = document.getElementById('category-select').value;
+        window.location.href = `search_results.html?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`;
+    }
+
+    // Modal placeholder
+    function openModal(modalId) {
+        alert(`Opening ${modalId}. This requires a proper modal implementation.`);
+    }
+
+    //  Auth UI update (stub)
+    function updateAuthUI() {
+        const token = localStorage.getItem('authToken');
+        const username = localStorage.getItem('username');
+        const authText = document.getElementById('auth-status-text');
+        const userDisplay = document.getElementById('username-display');
+
+        if (token && username) {
+            authText.textContent = 'Logout';
+            userDisplay.textContent = username;
+        } else {
+            authText.textContent = 'Login / Register';
+            userDisplay.textContent = 'Profile';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateAuthUI();
+    });
+  </script>
+</body>
+</html>

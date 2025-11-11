@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customers - Admin Panel - LayBack Garments</title>
+
+  <!--  Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!--  Font Awesome  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* =============== BASE =============== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #0b6623;
+      --text: #000;
+      --light-bg: #f9f9f9;
+      --white: #fff;
+      --border: #e8e8e8;
+      --container: 1222px;
+      --radius: 8px;
+      --shadow: 0 4px 12px rgba(0,0,0,0.1);
+      --sidebar-width: 250px;
+    }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background-color: #f5f5f5;
+      padding-left: var(--sidebar-width);
+    }
+    .container {
+      width: 100%;
+      max-width: calc(var(--container) - var(--sidebar-width));
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* =============== SIDEBAR =============== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: var(--sidebar-width);
+      background: var(--primary);
+      color: white;
+      padding: 20px 0;
+      z-index: 999;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      color: white;
+    }
+    .sidebar-menu ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar-menu li {
+      margin-bottom: 5px;
+    }
+    .sidebar-menu a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      padding: 10px 20px;
+      display: block;
+      transition: background 0.3s;
+    }
+    .sidebar-menu a:hover,
+    .sidebar-menu a.active {
+      background: rgba(255,255,255,0.1);
+      color: white;
+    }
+    .sidebar-menu i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* =============== HEADER =============== */
+    header {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: var(--sidebar-width);
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 15px;
+      z-index: 998;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo img {
+      max-height: 40px;
+      max-width: 150px;
+      object-fit: contain;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .user-info img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .user-info span {
+      font-weight: 600;
+    }
+
+    /* =============== MAIN =============== */
+    main {
+      padding-top: 80px;
+      padding-bottom: 20px;
+    }
+
+    .customers-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .customers-header h1 {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+    .customers-actions button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: end;
+    }
+    .filter-section label {
+      margin-right: 5px;
+    }
+    .filter-section select, .filter-section input, .filter-section button {
+      padding: 5px 10px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+    }
+    .filter-section button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: var(--light-bg);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .customer-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .actions button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .actions .view-btn { background: var(--primary); color: white; }
+    .actions .delete-btn { background: #dc3545; color: white; }
+
+    /* =============== FOOTER =============== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      left: var(--sidebar-width);
+      right: 0;
+      z-index: 997;
+    }
+
+    /* =============== NOTIFICATIONS =============== */
+    #notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .notif-success { background: #28a745; }
+    .notif-error { background: #dc3545; }
+    .notif-info { background: #17a2b8; }
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width: 992px) {
+      body { padding-left: 0; }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.active { transform: translateX(0); }
+      header, footer { left: 0; }
+      .filter-section { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Notification Toast -->
+  <div id="notification"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <li><a href="admin_page.html"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+        <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+        <li><a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a></li>
+        <li><a href="categories.html"><i class="fas fa-tags"></i> Categories</a></li>
+        <li><a href="reports.html"><i class="fas fa-chart-line"></i> Reports</a></li>
+        <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="logout.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Top Header -->
+  <header>
+    <div class="logo">
+     
+      <img src="./LaybackGarments/public/images/LOGO.png" alt="Layback Logo" />
+    </div>
+    <div class="user-info">
+  
+      <img src="https://via.placeholder.com/30" alt="Admin Avatar">
+      <span id="admin-username">Admin</span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <div class="customers-header">
+        <h1>Customer Management</h1>
+        <div class="customers-actions">
+          <button onclick="loadCustomers()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          <button onclick="exportCustomers()"><i class="fas fa-file-csv"></i> Export CSV</button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <div>
+          <label for="customerStatusFilter">Status:</label>
+          <select id="customerStatusFilter">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label for="searchCustomer">Search:</label>
+          <input type="text" id="searchCustomer" placeholder="Name or Email...">
+        </div>
+        <button onclick="applyFilters()"><i class="fas fa-filter"></i> Apply</button>
+        <button onclick="resetFilters()" style="background:#6c757d;"><i class="fas fa-undo"></i> Reset</button>
+      </div>
+
+      <table id="customerTable">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Joined</th>
+            <th>Orders</th>
+            <th>Total Spent</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customersTableBody">
+          <tr><td colspan="6" style="text-align:center;padding:20px;">Loading customers...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 LayBack Garments. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    //  Helper: Show notification
+    function showNotification(message, type = 'info') {
+      const notif = document.getElementById('notification');
+      notif.textContent = message;
+      notif.className = `notif-${type}`;
+      notif.style.display = 'block';
+      setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    //  Token check & init
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem('adminToken');
+      const username = localStorage.getItem('adminUsername') || 'Admin';
+      document.getElementById('admin-username').textContent = username;
+
+      if (!token) {
+        showNotification('🔒 Session expired. Redirecting...', 'error');
+        setTimeout(() => window.location.href = 'admin_login.html', 1500);
+        return;
+      }
+
+      loadCustomers();
+    });
+
+    //  Load customers (with retry logic)
+    async function loadCustomers() {
+      const tbody = document.getElementById('customersTableBody');
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch('/api/users', { // ✅ Relative path (no localhost hardcode)
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.status === 401) {
+          localStorage.removeItem('adminToken');
+          localStorage.removeItem('adminUsername');
+          showNotification('🔒 Unauthorized. Please log in.', 'error');
+          setTimeout(() => window.location.href = 'admin_login.html', 1500);
+          return;
+        }
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const users = await res.json();
+        renderCustomers(users);
+      } catch (err) {
+        console.error('Load customers error:', err);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;color:red;padding:20px;">
+              ❌ Failed to load customers<br>
+              <small>${err.message || 'Check network connection'}</small><br>
+              <button onclick="loadCustomers()" style="margin-top:10px;background:#0b6623;color:white;border:none;padding:5px 10px;border-radius:3px;">
+                <i class="fas fa-redo"></i> Retry
+              </button>
+            </td>
+          </tr>`;
+      }
+    }
+
+    function renderCustomers(users) {
+      const tbody = document.getElementById('customersTableBody');
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No customers found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(user => `
+        <tr>
+          <td>
+            <img src="${user.AvatarUrl || `https://via.placeholder.com/40x40/0b6623/FFFFFF?text=${encodeURIComponent((user.FirstName[0] || '?') + (user.LastName[0] || '?'))}`}" 
+                 alt="Avatar" class="customer-avatar" onerror="this.style.display='none'">
+            ${user.FirstName} ${user.LastName}
+          </td>
+          <td>${user.Email}</td>
+          <td>${new Date(user.CreatedAt).toLocaleDateString('en-ZA')}</td>
+          <td>${user.OrderCount || 0}</td>
+          <td>R ${(user.TotalSpent || 0).toFixed(2)}</td>
+          <td class="actions">
+            <button class="view-btn" title="View Details" 
+                    onclick="viewCustomer('${user.UserID}')">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="delete-btn" title="Delete Customer"
+                    onclick="deleteCustomer('${user.UserID}', '${user.FirstName}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Enhanced delete
+    async function deleteCustomer(id, name) {
+      if (!confirm(`🗑️ Delete customer "${name}"?\nThis cannot be undone.`)) return;
+
+      try {
+        const token = localStorage.getItem('adminToken');
+        const res = await fetch(`/api/users/${id}`, {
+          method: 'DELETE',
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (res.ok) {
+          showNotification(`✅ "${name}" deleted`, 'success');
+          loadCustomers();
+        } else if (res.status === 401) {
+          localStorage.removeItem('adminToken');
+          showNotification('🔒 Session expired', 'error');
+          setTimeout(() => window.location.href = 'admin_login.html', 1500);
+        } else {
+          const err = await res.json();
+          throw new Error(err.error || `HTTP ${res.status}`);
+        }
+      } catch (err) {
+        showNotification(`❌ Delete failed: ${err.message}`, 'error');
+      }
+    }
+
+    //  Secure export (uses POST to avoid token leaks)
+    async function exportCustomers() {
+      try {
+        const token = localStorage.getItem('adminToken');
+        
+        // Create hidden form to POST (more secure than GET with token in URL)
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/api/users/export';
+        form.style.display = 'none';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'token';
+        input.value = token;
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+
+        showNotification('📤 Export started...', 'info');
+      } catch (err) {
+        showNotification(`❌ Export failed: ${err.message}`, 'error');
+      }
+    }
+
+    //  Filters
+    function applyFilters() {
+      // Implement filtering on backend later
+      // For now: reload (you can add query params like ?status=active&search=john)
+      loadCustomers();
+    }
+
+    function resetFilters() {
+      document.getElementById('customerStatusFilter').value = 'all';
+      document.getElementById('searchCustomer').value = '';
+      loadCustomers();
+    }
+
+    function viewCustomer(id) {
+      window.location.href = `customer_details.html?customerId=${encodeURIComponent(id)}`;
+    }
+  </script>
+</body>
+</html>
+

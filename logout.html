@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Logging Out - LayBack Garments</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com  " />
+  <link rel="preconnect" href="https://fonts.gstatic.com  " crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .logout-container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .logout-container h1 {
+      color: #0b6623; /* Using --primary color */
+      margin-bottom: 20px;
+    }
+    .logout-container p {
+      margin-bottom: 30px;
+    }
+    .btn {
+      background: #0b6623; /* Using --primary color */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 35px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logout-container">
+    <h1>Logging Out</h1>
+    <p>You have been successfully logged out of the admin panel.</p>
+    <a href="home.html" class="btn">Go to Home Page</a>
+  </div>
+
+  <script>
+    // In a real application, this page would handle the logout logic
+    // For example, sending a request to the server to clear the session/cookie
+    // and then redirecting to the home page or login page.
+    // For this static example, we just show a message.
+  </script>
+
+</body>
+</html>
