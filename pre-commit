@@ -1,0 +1,5 @@
+#!/bin/sh
+if git diff --cached --name-only | grep -E "^\.(env|envrc)(\.|$)" > /dev/null 2>&1; then
+  echo "?? Blocked: .env files detected in commit. These often contain secrets."
+  exit 1
+fi
